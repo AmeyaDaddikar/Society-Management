@@ -5,7 +5,7 @@
 			{% if title %}
 				{{ title }} - 
 			{% endif %}
-			MachineIO
+			Society Management
 		</title>
 		
 		<meta charset="utf-8"> 
@@ -13,6 +13,9 @@
 
 		<!-- Local compiled Bootstrap styling library-->
 		<link rel="stylesheet" href="static/css/lib/bootstrap.css" />
+
+		<!-- Custom CSS -->
+		<link rel="stylesheet" href="static/css/base_layout.css">
 
 		<!-- Local compiled  JQeury library-->
 		<script type="text/javascript" src="static/js/lib/jquery.js"></script>
@@ -28,6 +31,23 @@
 	</head>
 
 	<body>
+		<!-- HEADER -->
+		<header class="row">
+			<div class="col-sm-12">
+				<h1>Community Hub</h1>
+			</div>			
+		</header>
+
 		{% block content %}{% endblock %}
+
+		<!-- FOOTER -->
+		<footer class="row">
+			<div class="col-sm-12">
+				<ul class="footer-list">
+					<li><a href="#ContactUs">Contact us</a></li>
+					<li><a href="#ToC">Terms Of Service</a></li>
+				</ul>
+			</div>
+		</footer>
 	</body>
 </html>

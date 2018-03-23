@@ -1,10 +1,35 @@
 {% extends "base.html" %}
 
+{% block headIncludes %}
+	<link rel="stylesheet" href="static/css/homepage_layout.css">
+{% endblock %}
+
 {% block content %}
-	<div class="jumbotron">
-		<div class="container-fluid">
-			<h1>Society Management</h1>
-			<h4>An I/O data storing and analytics platform for large scale machinery.</h4>
+	<div class="container-fluid title-div">
+		<div class="row">
+			<div class="col-lg-6">
+				<h1 class="title-text">Comunity Hub</h1>
+				<h2 class="title-sub-text">
+					United you stand,
+					<br />
+					with the technology in your hand.
+				</h2>
+			</div>
+
+			<div class="col-lg-6">
+				<img class="title-background" src="static/assets/images/background1.jpg" />
+			</div>
+		</div>
+	</div>
+
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-12">
+				<h3 id="center-paragraph">
+					Community Hub is a state of the art,
+					customizable social platform for local community groups.
+				</h3>
+			</div>
 		</div>
 	</div>
 

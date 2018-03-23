@@ -1,0 +1,36 @@
+.title-div {
+	background-color: white;
+	min-height: 300px;
+	text-align: center;
+}
+
+.title-text{
+	margin: auto;
+	margin-top: 1em;
+	color: #3366cc;
+	font-size: 290%;
+	text-shadow: #ebebe0 0px 0.1em;
+}
+
+.title-sub-text {
+	font-size: 190%;
+	color: #66b3ff;
+	margin-top: 1em;
+}
+
+.title-background{
+	margin-top: 30px;
+	margin-bottom: 30px;
+	margin-left: 0px;
+	margin-right: 0px;
+	width: 100%;
+}
+
+#center-paragraph {
+	color: #cc66ff;
+	text-align: center;
+	margin-top: 2.1em;
+	font-size: 2em;
+	min-height: 3em;
+}
+

@@ -1,0 +1,58 @@
+@font-face {
+   font-family: defaultFont;
+   src: url(../assets/fonts/Faune-Text_Regular.woff);
+}
+
+@font-face {
+   font-family: defaultFont;
+   src: url(../assets/fonts/Faune-Text_Bold.woff);
+   font-weight: bold;
+}
+
+@font-face {
+   font-family: defaultFont;
+   src: url(../assets/fonts/Faune-Text_Italic.woff);
+   font-style: italic;
+}
+
+body{
+	overflow-x: hidden;
+	font-family: defaultFont;
+}
+
+header, footer{
+	background-color: #9900e6;
+	color: white;
+	padding: 20px;
+	min-height: 3em;
+}
+
+
+footer{
+	margin-top: 30px;
+}
+
+ul.footer-list {
+	list-style-type: none;
+	margin: 0px;
+}
+ul.footer-list li {
+	font-size: 110%;
+	margin-right: 25px;
+	float: right;
+}
+
+ul.footer-list li a{
+	color: white;
+	padding-left: 5px;
+	padding-right: 5px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+
+ul.footer-list li a:hover {
+	color:#9900e6;
+	text-decoration: none;
+	border-radius: 3px;
+	background-color: white;
+}
