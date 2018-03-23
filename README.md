@@ -23,4 +23,4 @@ source venv/bin/activite
 ## Modules installed in the virtual environment
 
 1. flask
-2. mysql-connector (MySQLdb)
+2. mysqlclient (MySQLdb)
