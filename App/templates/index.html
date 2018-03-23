@@ -1,7 +1,13 @@
 {% extends "base.html" %}
 
+{% block title %}Community Hub{% endblock %}
 {% block headIncludes %}
 	<link rel="stylesheet" href="static/css/homepage_layout.css">
+	<script src="static/js/indexPage.js"></script>
+	
+	<!--Additional block for child static resources -->
+	{% block indexHtmlIncludes %}{% endblock %}
+	
 {% endblock %}
 
 {% block content %}
