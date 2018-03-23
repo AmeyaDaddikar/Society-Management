@@ -19,3 +19,8 @@ python3 -m flask run --host=0.0.0.0:5000
 #OR
 source venv/bin/activite
 '''
+
+## Modules installed in the virtual environment
+
+1. flask
+2. mysql-connector (MySQLdb)
