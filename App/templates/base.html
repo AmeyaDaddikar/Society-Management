@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>
+			{% if title %}
+				{{ title }} - 
+			{% endif %}
+			MachineIO
+		</title>
+		
+		<meta charset="utf-8"> 
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<!-- Local compiled Bootstrap styling library-->
+		<link rel="stylesheet" href="static/css/lib/bootstrap.css" />
+
+		<!-- Local compiled  JQeury library-->
+		<script type="text/javascript" src="static/js/lib/jquery.js"></script>
+
+		<!-- Local compiled Bootstrap javascript library-->
+		<script type="text/javascript" src="static/js/lib/bootstrap.js"></script>
+
+		<!-- Local compiled CharJS library-->
+		<script type="text/javascript" src="static/js/lib/Chart.bundle.js"></script>
+
+
+	</head>
+
+	<body>
+		{% block content %}{% endblock %}
+	</body>
+</html>
