@@ -25,13 +25,20 @@
 
 		{% block headIncludes %}{% endblock %}
 		
+		<script type="text/javascript">
+			$(document).ready(()=>{
+				$('[data-toggle="tooltip"]').tooltip();
+			});
+		</script>
 	</head>
 
 	<body>
 		<!-- HEADER -->
 		<header class="row">
 			<div class="col-sm-12">
-				<h1>Community Hub</h1>
+				<h1>
+					<a id="logo" href="/" data-toggle="tooltip" title="Go to Community Hub homepage">Community Hub</a>
+				</h1>
 			</div>			
 		</header>
 

@@ -27,6 +27,14 @@ header, footer{
 	min-height: 3em;
 }
 
+#logo{
+	color:inherit;
+}
+
+#logo:active, #logo:hover{
+	text-decoration:none;
+	color:#eeeeee;
+}
 
 footer{
 	margin-top: 30px;
