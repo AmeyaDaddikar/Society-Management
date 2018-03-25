@@ -16,3 +16,21 @@ $("#center-paragraph").ready(() => {
 		}
 	}, 40);
 });
+
+$(".fordDIv").ready(()=>{
+	let loginDiv  = $("#loginDiv");
+	let signupDiv = $("#signupDiv");
+	
+	loginDiv.css("display","block");
+	
+	$("#loginButton").click(()=>{
+		loginDiv.css("display","block");
+		signupDiv.css("display","none");
+	});
+
+	$("#signupButton").click(()=>{
+		loginDiv.css("display","none");
+		signupDiv.css("display","block");
+	});
+
+});

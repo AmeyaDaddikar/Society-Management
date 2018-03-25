@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 
-{% block title %}Community Hub{% endblock %}
 {% block headIncludes %}
 	<link rel="stylesheet" href="static/css/homepage_layout.css">
 	<script src="static/js/indexPage.js"></script>
@@ -36,6 +35,42 @@
 					customizable social platform for local community groups.
 				</h3>
 			</div>
+		</div>
+	</div>
+	
+	<div class="container formDiv">
+		<button id="loginButton">Login</button><button id="signupButton">Signup</button>
+		
+		<div class="row" id="loginDiv">
+			<h1 class="formHeading">Login</h1>
+
+			<form method="get">
+				<div class="form-group">
+					<label for="usr">Account Name:</label>
+					<input type="text" class="form-control" name="accName" id="accName" />
+				</div>
+
+				<div class="form-group">
+					<label for="pwd">Password:</label>
+					<input type="password" class="form-control" name="pwd" id="pwd" />
+				</div>
+			
+				<div class="radio">
+					<input type="radio" name="accOpt" />
+					<label for="accOpt">Resident Account</label>
+				</div>
+				<div class="radio">
+					<input type="radio" name="accOpt" />
+					<label for="accOpt">Admin Account</label>
+				</div>
+				<br/>
+				<center>
+					<input type="submit" class="btn btn-light btn-block btn-lg" value="Submit"/>
+				</center>
+			</form>
+		</div>
+		<div class="row" id="signupDiv">
+			<h1 class="formHeading">SignUp</h1>
 		</div>
 	</div>
 

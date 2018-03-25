@@ -2,7 +2,10 @@
 <html lang="en">
 	<head>
 		<title>
-			{% block title %}{% endblock %}
+			{% if title %}
+				{{ title }} - 
+			{% endif %}
+			Community Hub
 		</title>
 		
 		<meta charset="utf-8"> 
