@@ -64,6 +64,10 @@
 
 }
 
+#loginButton:hover, #signupButton:hover, #loginButton:hover, #signupButton:active {
+	background-color: #52527a;
+}
+
 .formHeading {
 	color:white;
 	font-family:inherit;
@@ -74,4 +78,9 @@
 
 #loginDiv label {
 	color:#3d3d5c;
+}
+
+.signupLink{
+	overflow:hidden;
+	margin:auto;
 }
