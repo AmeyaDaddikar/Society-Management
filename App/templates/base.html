@@ -41,11 +41,20 @@
 	<body>
 		<!-- HEADER -->
 		<header class="row">
-			<div class="col-sm-12">
+			<div class="col-md-10">
 				<h1>
 					<a id="logo" href="/" data-toggle="tooltip" title="Go to Community Hub homepage">Community Hub</a>
 				</h1>
-			</div>			
+			</div>
+
+			<!-- IF THE USER ARGUMENT IS P:ASSED< A USER NAME AND LOGO WILL APPEAR-->
+			{% if user %}
+			<div class="col-md-2">
+				<h3 style="text-align: right;">
+					<a style="color: inherit;" href="#userDashboard">Welcome {% user.name %}</a>
+				</h3>
+			</div>
+			{% endif %}
 		</header>
 
 		{% block content %}{% endblock %}
