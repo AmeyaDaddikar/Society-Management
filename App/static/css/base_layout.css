@@ -18,7 +18,10 @@
 body{
 	overflow-x: hidden;
 	font-family: defaultFont;
+	padding: 0px;
+	margin: 0px;
 }
+
 
 header, footer{
 	background-color: #9900e6;
@@ -37,7 +40,8 @@ header, footer{
 }
 
 footer{
-	margin-top: 30px;
+	margin-top: 0px;
+	margin-bottom: 0px;
 }
 
 ul.footer-list {
