@@ -1,55 +1,34 @@
-{% extends "base.html" %}
+{% extends "userpage.html" %}
 
-{% block headIncludes %}
+{% block userPageIncludes %}
 	<link rel="stylesheet" href="static/css/user_dashboard_layout.css">
 	<script src="static/js/userDashboard.js"></script>
 	
 	<!--Additional block for child static resources -->
-	{% block userDashboardIncludes %}{% endblock %}
+	{% block  userDashBoardIncludes %}{% endblock %}
 	
 {% endblock %}
 
-{% block content %}
-<div class="container-fluid row" style="margin: 0px; padding: 0px;">
-	<div class="col-md-2 dashboard-navbar">
-		<div class="navbar-header">Society Name</div>
-		<div class="account-tab">
-			<!-- DASHBOARD LINK NOT FUNCTIONAL PROBLEM WITH GET/POST PROBABLY-->
-			<hr/><a href="dashboard/">Dashboard</a>
-			<hr/><a href="#contacts">Emergency Contacts</a>
-			<hr/>
-		</div>
-		<div class="account-dropdown">
-			<h3>Account Settings</h3>
-			<div class="account-tab">
-				<hr/><a href="#bills">Bills</a>
-				<hr/><a href="#info">Account Info</a>
-				<hr/><a href="#documents">Documents</a>
-				<hr/>
-			</div>
-		</div>
-
+{% block userPageContent %}
+<div class="col-md-4 table-div">
+	<div id="scrollDiv">
+		<table class="table table-hover table-striped">
+			<thead>
+				<tr class="table-primary text-gray-dark" style="font-size: 1.5em; color: #004d99;">
+					<th>Subject</th>
+					<th>Date</th>
+				</tr>
+			</thead>
+			<tbody id="notifBody"></tbody>
+		</table>
 	</div>
-	<div class="col-md-4 table-div">
-		<div id="scrollDiv">
-			<table class="table table-hover table-striped">
-				<thead>
-					<tr class="table-primary text-gray-dark" style="font-size: 1.5em; color: #004d99;">
-						<th>Subject</th>
-						<th>Date</th>
-					</tr>
-				</thead>
-				<tbody id="notifBody"></tbody>
-			</table>
-		</div>
-		<button class="btn rounded-0 btn-block" id="refreshNotif">Refresh</button>
-	</div>
+	<button class="btn rounded-0 btn-block" id="refreshNotif">Refresh</button>
+</div>
 
-	<div class="col-md-6" id="notif-div">
-		<h1 id="notifSub">SUBJECT</h1>
-		<h4 id="notifDate">24/12/1998</h4>
+<div class="col-md-6" id="notif-div">
+	<h1 id="notifSub">SUBJECT</h1>
+	<h4 id="notifDate">24/12/1998</h4>
 
-		<p id="notifContent"></p>
-	</div>
+	<p id="notifContent"></p>
 </div>
 {% endblock %}

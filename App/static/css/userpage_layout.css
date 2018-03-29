@@ -1,0 +1,60 @@
+.dashboard-navbar {
+	background-color: #e6ccff;
+	padding-left: 0px;
+	padding-right: 0px;
+}
+
+.navbar-header {
+	background-color: #d699ff;
+	color: #9933ff;
+	margin:0px;
+	text-align: center;
+	padding: 0.5em;
+	font-size: 1.5em;
+}
+
+#flatDetails {
+
+}
+
+.account-dropdown {
+	background-color: #dd99ff;
+	color: white;
+	border-top: 2px solid #ccccb3;
+	border-bottom: 2px solid #ccccb3;
+	margin:0px;
+	text-align: center;
+	padding: 0px;
+	font-size: 1.2em;
+}
+
+.account-dropdown h3{
+	padding: 0.2em;
+	font-size: 1.5em;
+}
+
+.account-tab{
+	background-color: #f5f5f0;
+	color: #cc33ff;
+	margin: 0px;
+	text-align: center;
+	border-bottom: 2px solid #ccccb3;
+	padding: 0.2em;
+}
+
+@keyframes hoverDropdown {
+	0% {opacity: 0}
+	25% {opacity: 0.25}
+	50% {opacity: 0.5}
+	75% {opacity: 0.75}
+	100% {opacity: 1}
+}
+
+.account-dropdown div {
+	display: none;
+}
+.account-dropdown:hover  div{
+	display: block;
+	animation-name: hoverDropdown;
+	animation-duration: 1s;
+}

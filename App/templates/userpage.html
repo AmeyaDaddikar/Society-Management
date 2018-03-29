@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block headIncludes %}
+	<link rel="stylesheet" href="static/css/userpage_layout.css">
+	
+	<!--Additional block for child static resources -->
+	{% block userPageIncludes %}{% endblock %}
+	
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid row" style="margin: 0px; padding: 0px;">
+	<div class="col-md-2 dashboard-navbar">
+		<div class="navbar-header">Society Name</div>
+		<div class="account-tab">
+			<!-- DASHBOARD LINK NOT FUNCTIONAL PROBLEM WITH GET/POST PROBABLY-->
+			<hr/><a href="dashboard/">Dashboard</a>
+			<hr/><a href="#contacts">Emergency Contacts</a>
+			<hr/>
+		</div>
+		<div class="account-dropdown">
+			<h3>Account Settings</h3>
+			<div class="account-tab">
+				<hr/><a href="#bills">Bills</a>
+				<hr/><a href="#info">Account Info</a>
+				<hr/><a href="#documents">Documents</a>
+				<hr/>
+			</div>
+		</div>
+	</div>
+	{% block userPageContent %} {% endblock %}
+</div>
+{% endblock %}
