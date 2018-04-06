@@ -49,9 +49,9 @@
 
 			<!-- IF THE USER ARGUMENT IS P:ASSED< A USER NAME AND LOGO WILL APPEAR-->
 			{% if user %}
-			<div class="col-md-2">
+			<div class="col-md-2" id="userIconDiv">
 				<h3 style="text-align: right;">
-					<a style="color: inherit;" href="#userDashboard">Welcome {{ user.name }}</a>
+					<a style="color: inherit;" href="/dashboard" id="userIcon">Welcome {{ user.name }}</a>
 				</h3>
 			</div>
 			{% endif %}

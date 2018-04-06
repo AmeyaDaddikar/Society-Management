@@ -1,0 +1,20 @@
+{% extends "user/userpage.html" %}
+
+{% block userPageIncludes %}
+	<link rel="stylesheet" href="static/css/user_profile_layout.css">
+	<!--
+	<script src="static/js/userBill.js"></script>
+	-->
+
+	<!--Additional block for child static resources -->
+	{% block  userProfileIncludes %}{% endblock %}
+	
+{% endblock %}
+
+{% block userPageContent %}
+<div class="col-md-10">
+	<div class="container">
+		<h1>Account</h1>
+	</div>
+</div>
+{% endblock %}

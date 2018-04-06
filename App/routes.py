@@ -27,10 +27,16 @@ def login():
 	if accName != 'Ameya':
 		return redirect(url_for('index', loginError=True))
 		
-	return redirect(url_for('userDashboard'))
+	return redirect(url_for('userDashboard', accName = accName))
 
 @app.route('/dashboard', methods=['GET'])
-
 def userDashboard():
-	return render_template('userdashboard.html')
+	return render_template('user/userdashboard.html', user= request.args.get("accName"))
 
+@app.route('/bills')
+def userBill():
+	return render_template('user/userbillpage.html')
+
+@app.route('/profile')
+def userProfile():
+	return render_template('user/userprofile.html')
