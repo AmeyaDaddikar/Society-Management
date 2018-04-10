@@ -1,0 +1,29 @@
+.imageContainer {
+	margin: 5vh auto;
+	width: 200px;
+	height: 200px;
+	border-radius: 100px;
+	background-color: #e0e0d1;
+	overflow: hidden;
+	align-self: center;
+	padding: 50px;
+}
+
+.imageContainer:hover{
+	opacity: 0.9;
+}
+
+#profileImg {
+	z-index: 1;
+	overflow: hidden;
+}
+
+#FlatOwnerName {
+	margin-top: 5vh;
+	font-size: 4em;
+	color: #0052cc;
+}
+
+#FlatDetails {
+	font-size: 2em;
+}

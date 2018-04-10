@@ -2,9 +2,7 @@
 
 {% block userPageIncludes %}
 	<link rel="stylesheet" href="static/css/user_profile_layout.css">
-	<!--
-	<script src="static/js/userBill.js"></script>
-	-->
+	
 
 	<!--Additional block for child static resources -->
 	{% block  userProfileIncludes %}{% endblock %}
@@ -13,8 +11,51 @@
 
 {% block userPageContent %}
 <div class="col-md-10">
-	<div class="container">
-		<h1>Account</h1>
+	<div class="container-fluid row" style="margin: auto;">
+		<div class="col-md-4 align-content-center">
+			<div class="imageContainer">
+				<img src="#" id="profileImg" alt="Profile Image" />
+			</div>
+		</div>
+		<div class="col-md-8">
+			<h1 id="FlatOwnerName">Vineet Rao</h1>
+			<h2 id="FlatDetails">A-201 Sunshine Heights</h2>
+		</div>
+	</div>
+	<div class="container-fluid row" style="margin: auto;">
+		<div class="col-md-7">
+			<table class="table table-hover table-bordered">
+				<thead>
+					<tr class="table-primary">
+						<th>Resident Name</th>
+						<th>Contact Number</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>Vineet Rao</td>
+						<td>1234</td>
+					</tr>
+					<tr>
+						<td>Ameya Daddikar</td>
+						<td>3453</td>
+					</tr>
+					<tr>
+						<td>Aman Framewala</td>
+						<td>456758</td>
+					</tr>
+					<tr>
+						<td>Yash Dani</td>
+						<td>454676</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="col-md-5 jumbotron">
+			<button class="btn btn-danger btn-block">Amount Due : Rs. 1000</button>
+			<button class="btn btn-warning btn-block">Edit Details</button>
+			<button class="btn btn-primary btn-block">Documents</button>
+		</div>
 	</div>
 </div>
 {% endblock %}
