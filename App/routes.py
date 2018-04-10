@@ -40,3 +40,9 @@ def userBill():
 @app.route('/profile')
 def userProfile():
 	return render_template('user/userprofile.html')
+
+@app.route('/editDetails', methods=['POST'])
+def updateUserDetails():
+	#DO ALL DATABASE UPDATES HERE
+	return render_template('user/userprofile.html')
+

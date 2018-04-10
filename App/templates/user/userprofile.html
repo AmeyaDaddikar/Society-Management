@@ -53,9 +53,35 @@
 		</div>
 		<div class="col-md-5 jumbotron">
 			<button class="btn btn-danger btn-block">Amount Due : Rs. 1000</button>
-			<button class="btn btn-warning btn-block">Edit Details</button>
+			<button class="btn btn-warning btn-block" data-toggle="modal" data-target="#editDetailsModal" >Edit Details</button>
 			<button class="btn btn-primary btn-block">Documents</button>
 		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="editDetailsModal">
+	<div class="modal-dialog">
+		<form name="editDetails" action="editDetails" method="post" onsubmit="function(){return false;}">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title">Modal Heading</h4>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+				<div class="modal-body">
+					<div class="form-group">
+						<label for="NameRes1">Resident Name 1</label><br/>
+						<input type="text" name="NameRes1" id="NameRes1" />
+					</div>
+					<div class="form-group">
+						<label for="NumRes1">Contact Details</label><br/>
+						<input type="text" name="NumRes1" id="NumRes1" />
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-primary">Submit</button>
+				</div>
+			</div>
+		</form>
 	</div>
 </div>
 {% endblock %}
