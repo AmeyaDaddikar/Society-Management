@@ -13,8 +13,80 @@
 
 {% block userPageContent %}
 <div class="col-md-10">
+	<div class="container currBillContainer">
+		<h1  class="float-left" style="color: #6b6b47;">Maintainence Bill</h1>
+		<h1  class="float-md-right" id="billDate">Date : <span id="date">28/07/1998</span></h1>
+		<table class="table table-bordered">
+			<thead class="thead-dark">
+				<tr>
+					<th>Category</th>
+					<th>Cost</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>Electricity Bill</td>
+					<td>3000</td>
+				</tr>
+				<tr>
+					<td>Electricity Bill</td>
+					<td>3000</td>
+				</tr>
+				<tr>
+					<td>Electricity Bill</td>
+					<td>3000</td>
+				</tr>
+				 <tr>
+					<td>Electricity Bill</td>
+					<td>3000</td>
+				</tr>
+				<tr>
+					<td>Electricity Bill</td>
+					<td>3001</td>
+				</tr>
+				<tr class="table-active">
+					<td>Total</td>
+					<td>Over 9000</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 	<div class="container">
-		<h1>Bill</h1>
+		<button class="btn btn-block btn-outline-dark">Download Bill Copy</button>
+		<br/>
+
+		<h1 class="float-left" style="color: #6b6b47;">Previous Bills</h1>
+		<table class="table table-hover table-bordered table-striped">
+			<thead class="thead-dark">
+				<tr>
+					<th>Date</th>
+					<th>Amount</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>Bill1</td>
+					<td>25/12/1998</td>
+				</tr>
+				<tr>
+					<td>Bill1</td>
+					<td>25/12/1998</td>
+				</tr>
+				<tr>
+					<td>Bill1</td>
+					<td>25/12/1998</td>
+				</tr>
+				<tr>
+					<td>Bill1</td>
+					<td>25/12/1998</td>
+				</tr>
+				<tr>
+					<td>Bill1</td>
+					<td>25/12/1998</td>
+				</tr>
+
+			</tbody>
+		</table>
 	</div>
 </div>
 {% endblock %}
