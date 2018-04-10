@@ -69,3 +69,8 @@ ul.footer-list li a:hover {
 	border-radius: 3px;
 	background-color: white;
 }
+
+button a {
+	color: inherit;
+	text-decoration: inherit;
+}

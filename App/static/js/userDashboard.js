@@ -23,6 +23,7 @@ $("#notifBody").ready(function(){
 	let notifSub     = $("#notifSub");
 	let notifDate    = $("#notifDate");
 	let notifContent = $("#notifContent");
+	let notifDiv     = $("#notif-div");
 
 	let configureTableElements = function(){
 		let currNotifData = fetchData();
@@ -43,9 +44,13 @@ $("#notifBody").ready(function(){
 		$("#notifBody").children().click(function(event){
 			let dataIndex = $(this).index();
 
+			notifDiv.fadeOut(200);
+
 			notifSub.text(currNotifData[dataIndex].subject);
 			notifDate.text(currNotifData[dataIndex].date);
 			notifContent.text(currNotifData[dataIndex].body);
+
+			notifDiv.fadeIn(200);
 			console.log(dataIndex);
 		});
 	};
