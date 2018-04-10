@@ -2,9 +2,8 @@
 
 {% block userPageIncludes %}
 	<link rel="stylesheet" href="static/css/user_bill_layout.css">
-	<!--
 	<script src="static/js/userBill.js"></script>
-	-->
+	
 
 	<!--Additional block for child static resources -->
 	{% block  userBillIncludes %}{% endblock %}
@@ -57,34 +56,25 @@
 
 		<h1 class="float-left" style="color: #6b6b47;">Previous Bills</h1>
 		<table class="table table-hover table-bordered table-striped">
-			<thead class="thead-dark">
+			<thead class="thead-dark" id="billHistory">
 				<tr>
 					<th>Date</th>
 					<th>Amount</th>
 				</tr>
 			</thead>
-			<tbody>
+			<tbody id="prevBills">
 				<tr>
-					<td>Bill1</td>
-					<td>25/12/1998</td>
+					<td>12/1998</td>
+					<td>2000</td>
 				</tr>
 				<tr>
-					<td>Bill1</td>
-					<td>25/12/1998</td>
+					<td>12/1998</td>
+					<td>2000</td>
 				</tr>
 				<tr>
-					<td>Bill1</td>
-					<td>25/12/1998</td>
+					<td>12/1998</td>
+					<td>2000</td>
 				</tr>
-				<tr>
-					<td>Bill1</td>
-					<td>25/12/1998</td>
-				</tr>
-				<tr>
-					<td>Bill1</td>
-					<td>25/12/1998</td>
-				</tr>
-
 			</tbody>
 		</table>
 	</div>

@@ -46,3 +46,7 @@ def updateUserDetails():
 	#DO ALL DATABASE UPDATES HERE
 	return render_template('user/userprofile.html')
 
+@app.route('/issues', methods=['GET', 'POST'])
+def getComplaints():
+	#get the POST DATA from forms if submitted
+	return render_template('user/usercomplaints.html')
