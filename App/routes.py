@@ -1,10 +1,16 @@
 import json
 from . import app
+from App  import dbconnect
 from flask import render_template, request, redirect, url_for, make_response, session, jsonify
 
 # OPTIONAL/ REQUIRED ARGUMENT LIST
 # 1. title (base.html) : Displays the title of the page
 
+try:
+	CONN, CURSOR = dbconnect.connection()
+except Exception as e:
+	print(e)
+	exit()
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
@@ -20,15 +26,26 @@ def index():
 
 @app.route('/loginCheck', methods=['POST'])
 def login():
-	accName  = request.form['accName']
+
+	accId  = int(request.form['accName'])
 	password = request.form['pwd']
 	
+	if password is None or len(password) == 0:
+		password = ''
 
-	#DATABASE CHECKS
-	if accName not in ['Ameya', 'Vineet']:
+	accQuery = "SELECT * FROM account \
+				WHERE acc_id = %d && acc_pass = '%s'" % (accId, password)
+
+	CURSOR.execute(accQuery)
+
+	if CURSOR.rowcount <= 0:
 		return redirect(url_for('index', loginError=True))
-		
-	session['username'] = accName
+
+	currUser = CURSOR.fetchone()
+	session['username'] = currUser[3]
+	session['userId']   = currUser[0]
+	session['flatId']   = currUser[1]
+
 
 	return redirect(url_for('userDashboard'))
 
@@ -40,7 +57,13 @@ def logout():
 @app.route('/refreshNotices', methods=['GET'])
 def getNoticeList():
 
-	noticeList = [{'subject': "Notice 1", 'date': "28/07/1998", 'body': "This is notice 1"},{'subject': "Notice 2", 'date': "10/08/1998", 'body': "This is notice 2"}]
+	noticeQuery = "SELECT * FROM notices WHERE notice_id in (SELECT notice_id FROM flat_addr WHERE flat_id=%d)" % (session['flatId'])
+	CURSOR.execute(noticeQuery)
+
+	result = CURSOR.fetchall()
+	print(result)
+	noticeList = [{'subject':row[2], 'date':str(row[3]), 'body':row[4]} for row in result]
+	#noticeList = [{'subject': "Notice 1", 'date': "28/07/1998", 'body': "This is notice 1"},{'subject': "Notice 2", 'date': "10/08/1998", 'body': "This is notice 2"}]
 
 	noticeList = json.dumps(noticeList)
 	return noticeList
