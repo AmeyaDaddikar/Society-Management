@@ -50,7 +50,7 @@
 			<!-- IF THE USER ARGUMENT IS P:ASSED< A USER NAME AND LOGO WILL APPEAR-->
 			{% if 'username' in session %}
 			<div class="col-md-5">
-				<a class="btn btn-light float-right" href="/dashboard" id="userIcon">Noticeboard {{ session['username'] }}</a>
+				<a class="btn btn-light float-right" href="/dashboard" id="userIcon">Welcome {{ session['username'] }}</a>
 			</div>
 			<div class="col-md-1">
 				<a class="btn btn-dark float-right" href="/logout">Logout</a>

@@ -42,11 +42,16 @@ def login():
 	if CURSOR.rowcount <= 0:
 		return redirect(url_for('index', loginError=True))
 
+
 	currUser = CURSOR.fetchone()
 	session['username'] = currUser[3]
 	session['userId']   = currUser[0]
 	session['flatId']   = currUser[1]
 
+	societyNameQuery = "SELECT society_name FROM society WHERE society_id in (SELECT society_id FROM flat_addr WHERE flat_id=%d)" % (session['flatId'])
+	CURSOR.execute(societyNameQuery)
+
+	session['societyName'] = CURSOR.fetchone()[0]
 
 	return redirect(url_for('userDashboard'))
 
@@ -64,23 +69,39 @@ def getNoticeList():
 	result = CURSOR.fetchall()
 	print(result)
 	noticeList = [{'subject':row[2], 'date':str(row[3]), 'body':row[4]} for row in result]
-	#noticeList = [{'subject': "Notice 1", 'date': "28/07/1998", 'body': "This is notice 1"},{'subject': "Notice 2", 'date': "10/08/1998", 'body': "This is notice 2"}]
-
+	
 	noticeList = json.dumps(noticeList)
 	return noticeList
 
 
 @app.route('/dashboard', methods=['GET'])
 def userDashboard():
-	return render_template('user/userdashboard.html', user= request.args.get("accName"))
+	return render_template('user/userdashboard.html')
 
 @app.route('/bills')
 def userBill():
-	return render_template('user/userbillpage.html')
+	currBill = {}
+	currBill['date'] = "7/2016"
+	currBill['categories'] = [{'category':'WATER CHARGES', 'cost':300},{'category':'MAINTAINANCE CHARGES', 'cost':1000},{'category':'PROPERTY TAX', 'cost':1000},{'category':'ELEC CHARGES', 'cost': 400}]
+	currBill['amount'] = 2700
+
+	billList = [{'date': currBill['date'], 'amount': currBill['amount']},{'date': "6/2016", 'amount':2500}, {'date':"5/2016", 'amount':2550}]
+	return render_template('user/userbillpage.html', currBill=currBill, billList=billList)
 
 @app.route('/profile')
 def userProfile():
-        return render_template('user/userprofile.html')
+		ownerNameQuery = "SELECT owner_name, pending_dues FROM account WHERE acc_id=%d" % (session['userId'])
+		CURSOR.execute(ownerNameQuery)
+		ownerRes = CURSOR.fetchone()
+		ownerName = ownerRes[0]
+		pendingDues = ownerRes[1]
+
+		residentQuery = "SELECT resident_name, resident_id FROM resident WHERE flat_id=%d" % (session['flatId'])
+		CURSOR.execute(residentQuery)
+
+		resList = [{'name' :row[0], 'phone': str(1234), 'id': str(row[1])} for row in CURSOR.fetchall()]
+
+		return render_template('user/userprofile.html', ownerName = ownerName, resList = resList, pendingDues = pendingDues)
 
 @app.route('/editDetails', methods=['POST'])
 def updateUserDetails():
@@ -115,7 +136,7 @@ def updateUserDetails():
 @app.route('/issues', methods=['GET', 'POST'])
 def getComplaints():
 	#get the POST DATA from forms if submitted
-        print("Hi")
+        
         if(request.method == 'POST'):
             related = request.form.get("relatedTo", None)
             if(related == None):
@@ -146,4 +167,10 @@ def getComplaints():
             #CURSOR.execute(new_issue_query)
             CURSOR.execute("INSERT INTO issues VALUES(%s, %s, %s, %s, '', %s)", [int(new_max), int(accId), curr_date, complaint, related])
             CONN.commit()
-        return render_template('user/usercomplaints.html')
+
+        elif(request.method == 'GET'):
+            issuesQuery = "SELECT issue_date, issue_desc, related FROM issues WHERE acc_id IN (SELECT acc_id FROM account WHERE flat_id=%d) ORDER BY issue_date" % (session['flatId'])
+            CURSOR.execute(issuesQuery)
+
+            issuesList = [{'date': str(row[0]), 'desc': row[1], 'related': row[2]} for row in CURSOR.fetchall()]
+        return render_template('user/usercomplaints.html', issuesList = issuesList)

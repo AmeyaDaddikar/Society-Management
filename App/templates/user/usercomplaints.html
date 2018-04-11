@@ -42,9 +42,11 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td>asd</td>
-						<td>asd</td>
-						<td>asd</td>
+						{% for issue in issuesList %}
+						<td>{{ issue['date'] }}</td>
+						<td>{{ issue['related'] }}</td>
+						<td>{{ issue['desc'] }}</td>
+						{% endfor %}
 					</tr>
 				</tbody>
 			</table>
