@@ -1,5 +1,6 @@
+import json
 from . import app
-from flask import render_template, request, redirect, url_for, make_response
+from flask import render_template, request, redirect, url_for, make_response, session, jsonify
 
 # OPTIONAL/ REQUIRED ARGUMENT LIST
 # 1. title (base.html) : Displays the title of the page
@@ -22,12 +23,28 @@ def login():
 	accName  = request.form['accName']
 	password = request.form['pwd']
 	
-	#validate accName and password here
-	#replace this condition
+
+	#DATABASE CHECKS
 	if accName != 'Ameya':
 		return redirect(url_for('index', loginError=True))
 		
-	return redirect(url_for('userDashboard', accName = accName))
+	session['username'] = accName
+
+	return redirect(url_for('userDashboard'))
+
+@app.route('/logout', methods=['GET'])
+def logout():
+	session.pop('username', None)
+	return redirect(url_for('index'))
+
+@app.route('/refreshNotices', methods=['GET'])
+def getNoticeList():
+
+	noticeList = [{'subject': "Notice 1", 'date': "28/07/1998", 'body': "This is notice 1"},{'subject': "Notice 2", 'date': "10/08/1998", 'body': "This is notice 2"}]
+
+	noticeList = json.dumps(noticeList)
+	return noticeList
+
 
 @app.route('/dashboard', methods=['GET'])
 def userDashboard():

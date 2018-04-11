@@ -1,20 +1,24 @@
-let notifData = [
-		{subject: "Notice 1", date: "28/07/1998", body: "This is notice 1"},
-		{subject: "Notice 2", date: "10/08/1998", body: "This is notice 2"},
-		{subject: "Notice 3", date: "25/12/1998", body: "This is notice 3"},
-		{subject: "Notice 4", date: "28/07/1998", body: "This is notice 1"},
-		{subject: "Notice 5", date: "10/08/1998", body: "This is notice 2"},
-		{subject: "Notice 6", date: "25/12/1998", body: "This is notice 3"},
-		{subject: "Notice 7", date: "28/07/1998", body: "This is notice 1"},
-		{subject: "Notice 8", date: "10/08/1998", body: "This is notice 2"},
-		{subject: "Notice 9", date: "25/12/1998", body: "This is notice 3"},
-		{subject: "Notice 10", date: "28/07/1998", body: "This is notice 1"},
-		{subject: "Notice 12", date: "10/08/1998", body: "This is notice 2"},
-		{subject: "Notice 13", date: "25/12/1998", body: "This is notice 3"},
-		];
+let notifData = [{subject: "Loading...", date: "", body: ""}];
+		// [
+		// {subject: "Notice 1", date: "28/07/1998", body: "This is notice 1"},
+		// {subject: "Notice 2", date: "10/08/1998", body: "This is notice 2"},
+		// {subject: "Notice 3", date: "25/12/1998", body: "This is notice 3"},
+		// {subject: "Notice 4", date: "28/07/1998", body: "This is notice 1"},
+		// {subject: "Notice 5", date: "10/08/1998", body: "This is notice 2"},
+		// {subject: "Notice 6", date: "25/12/1998", body: "This is notice 3"},
+		// {subject: "Notice 7", date: "28/07/1998", body: "This is notice 1"},
+		// {subject: "Notice 8", date: "10/08/1998", body: "This is notice 2"},
+		// {subject: "Notice 9", date: "25/12/1998", body: "This is notice 3"},
+		// {subject: "Notice 10", date: "28/07/1998", body: "This is notice 1"},
+		// {subject: "Notice 12", date: "10/08/1998", body: "This is notice 2"},
+		// {subject: "Notice 13", date: "25/12/1998", body: "This is notice 3"},
+		// ];
 
 function fetchData(){
-	//MAKE A AJAX REQUEST AND MAKE THE NOTIFICATION LIST IN THE ABOVE FORMAT
+	$.get("/refreshNotices", function(data, status){
+		notifData = JSON.parse(data);
+	});
+	
 	return notifData;
 }
 
@@ -58,12 +62,21 @@ $("#notifBody").ready(function(){
 	let clearTable = function(){
 		$("#notifBody").children().remove();
 	}
-
+	fetchData();
+	setTimeout(function(){
+	clearTable();
 	configureTableElements();
 
+	}, 1000);
+
+	
 	$("#refreshNotif").click(function(){
+		$("#notifBody").fadeOut(100);
 		clearTable();
 		configureTableElements();
+		$("#notifBody").fadeIn(100);
 	});
 });
+
+
 

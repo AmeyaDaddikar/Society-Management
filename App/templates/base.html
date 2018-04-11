@@ -41,18 +41,19 @@
 	<body>
 		<!-- HEADER -->
 		<header class="row">
-			<div class="col-md-10">
+			<div class="col-md-6">
 				<h1>
 					<a id="logo" href="/" data-toggle="tooltip" title="Go to Society Hub homepage">Society Hub</a>
 				</h1>
 			</div>
 
 			<!-- IF THE USER ARGUMENT IS P:ASSED< A USER NAME AND LOGO WILL APPEAR-->
-			{% if user %}
-			<div class="col-md-2" id="userIconDiv">
-				<h3 style="text-align: right;">
-					<a style="color: inherit;" href="/dashboard" id="userIcon">Welcome {{ user.name }}</a>
-				</h3>
+			{% if 'username' in session %}
+			<div class="col-md-5">
+				<a class="btn btn-light float-right" href="/dashboard" id="userIcon">Noticeboard {{ session['username'] }}</a>
+			</div>
+			<div class="col-md-1">
+				<a class="btn btn-dark float-right" href="/logout">Logout</a>
 			</div>
 			{% endif %}
 		</header>
