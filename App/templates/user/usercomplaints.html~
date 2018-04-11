@@ -10,7 +10,7 @@
 
 {% block userPageContent %}
 	<div class="col-md-10">
-		<form action="/issues" method="post">
+		<form action="/complaints" method="post">
 			<div>
 				<h1 class="mHeader">Issues</h1>
 				<div class="form-group">

@@ -98,9 +98,8 @@ def updateUserDetails():
             curr_max = CURSOR.fetchone()
             new_max = curr_max[0] + 1
             print(new_max)
-            #new_res_query = "INSERT INTO resident VALUES(%d, %d, '%s', %d)" % (new_max, session['flatId'], new_owner, new_contact)
-            #CURSOR.execute(new_res_query)
-            CURSOR.execute("INSERT INTO resident VALUES(%s, %s, %s, %s)", [int(new_max), int(session['flatId']), new_owner, new_contact])
+            new_res_query = "INSERT INTO resident VALUES(%d, %d, '%s', %d)" % (new_max, session['flatId'], new_owner, new_contact)
+            CURSOR.execute(new_res_query)
             CONN.commit()
         else:
             r = CURSOR.fetchone()
