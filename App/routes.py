@@ -25,7 +25,7 @@ def login():
 	
 
 	#DATABASE CHECKS
-	if accName != 'Ameya':
+	if accName not in ['Ameya', 'Vineet']:
 		return redirect(url_for('index', loginError=True))
 		
 	session['username'] = accName
