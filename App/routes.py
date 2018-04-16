@@ -4,8 +4,7 @@ from App  import dbconnect
 from flask import render_template, request, redirect, url_for, make_response, session, jsonify
 import datetime
 
-# OPTIONAL/ REQUIRED ARGUMENT LIST
-# 1. title (base.html) : Displays the title of the page
+# PLEASE USE TABS FOR INDENTS RAO
 
 try:
 	CONN, CURSOR = dbconnect.connection()
@@ -106,71 +105,76 @@ def userProfile():
 @app.route('/editDetails', methods=['POST'])
 def updateUserDetails():
 	#DO ALL DATABASE UPDATES HERE
-        print("Hello")
-        new_owner=request.form['NameRes1']
-        new_contact=int(request.form['NumRes1'])
-        print(new_owner)
-        print(new_contact)
-        check_present_query = "SELECT resident_id, contact FROM resident WHERE resident_name='%s' AND flat_id=%d" % (new_owner, session['flatId'])
-        CURSOR.execute(check_present_query)
-        if(CURSOR.rowcount <= 0):
-            check_max_query = "SELECT MAX(resident_id) FROM resident"
-            CURSOR.execute(check_max_query)
-            curr_max = CURSOR.fetchone()
-            new_max = curr_max[0] + 1
-            print(new_max)
-            #new_res_query = "INSERT INTO resident VALUES(%d, %d, '%s', %d)" % (new_max, session['flatId'], new_owner, new_contact)
-            #CURSOR.execute(new_res_query)
-            CURSOR.execute("INSERT INTO resident VALUES(%s, %s, %s, %s)", [int(new_max), int(session['flatId']), new_owner, new_contact])
-            CONN.commit()
-        else:
-            r = CURSOR.fetchone()
-            res_id = r[0]
-            old_contact = r[1]
-            if(new_contact != old_contact):
-                new_cont_query = "UPDATE resident SET contact=%d WHERE resident_id=%d" % (new_contact, res_id) 
-                CURSOR.execute(new_cont_query)
-                CONN.commit()
-        return render_template('user/userprofile.html')
+	for key in request.form.keys():
+		print(key)
+        # print("Hello")
+        # new_owner=request.form['NameRes1']
+        # new_contact=int(request.form['NumRes1'])
+        # print(new_owner)
+        # print(new_contact)
+        # check_present_query = "SELECT resident_id, contact FROM resident WHERE resident_name='%s' AND flat_id=%d" % (new_owner, session['flatId'])
+        # CURSOR.execute(check_present_query)
+        # if(CURSOR.rowcount <= 0):
+        #     check_max_query = "SELECT MAX(resident_id) FROM resident"
+        #     CURSOR.execute(check_max_query)
+        #     curr_max = CURSOR.fetchone()
+        #     new_max = curr_max[0] + 1
+        #     print(new_max)
+        #     #new_res_query = "INSERT INTO resident VALUES(%d, %d, '%s', %d)" % (new_max, session['flatId'], new_owner, new_contact)
+        #     #CURSOR.execute(new_res_query)
+        #     CURSOR.execute("INSERT INTO resident VALUES(%s, %s, %s, %s)", [int(new_max), int(session['flatId']), new_owner, new_contact])
+        #     CONN.commit()
+        # else:
+        #     r = CURSOR.fetchone()
+        #     res_id = r[0]
+        #     old_contact = r[1]
+        #     if(new_contact != old_contact):
+        #         new_cont_query = "UPDATE resident SET contact=%d WHERE resident_id=%d" % (new_contact, res_id) 
+        #         CURSOR.execute(new_cont_query)
+        #         CONN.commit()
+	return redirect(url_for('userProfile'))
 
 @app.route('/issues', methods=['GET', 'POST'])
 def getComplaints():
 	#get the POST DATA from forms if submitted
-        
-        if(request.method == 'POST'):
-            related = request.form.get("relatedTo", None)
-            if(related == None):
-                related = 'None'
-            print(related)
-            complaint = request.form['complaints']
-            print(complaint)
-            accId = session['userId']
-            now = datetime.datetime.now()
-            curr_year = str(now.year)
-            if(now.month < 10):
-                curr_month = '0' + str(now.month)
-            else:
-                curr_month = str(now.month)
-            if(now.day < 10):
-                curr_day = '0' + str(now.day)
-            else:
-                curr_day = str(now.day)
-            curr_date = curr_year + curr_month + curr_day
-            print(accId)
-            print(curr_date)
-            check_max_query = "SELECT MAX(issue_id) FROM issues"
-            CURSOR.execute(check_max_query)
-            curr_max = CURSOR.fetchone()
-            new_max = curr_max[0] + 1
-            print(new_max)
+	if(request.method == 'POST'):
+		related = request.form.get("relatedTo", None)
+		if(related == None):
+			related = 'None'
+		print(related)
+		complaint = request.form['complaints']
+		print(complaint)
+		accId = session['userId']
+		now = datetime.datetime.now()
+		curr_year = str(now.year)
+		if(now.month < 10):
+			curr_month = '0' + str(now.month)
+		else:
+			curr_month = str(now.month)
+		if(now.day < 10):
+			curr_day = '0' + str(now.day)
+		else:
+			curr_day = str(now.day)
+		curr_date = curr_year + curr_month + curr_day
+		print(accId)
+		print(curr_date)
+		check_max_query = "SELECT MAX(issue_id) FROM issues"
+		CURSOR.execute(check_max_query)
+		curr_max = CURSOR.fetchone()
+		print(curr_max)
+		if curr_max[0] is not None:
+			new_max = curr_max[0] + 1
+			print(new_max)
             #new_issue_query = "INSERT INTO issues VALUES(%d, %d, '%s', '%s', '', '%s')" % (new_max, accId, curr_date, complaint, related)
             #CURSOR.execute(new_issue_query)
-            CURSOR.execute("INSERT INTO issues VALUES(%s, %s, %s, %s, '', %s)", [int(new_max), int(accId), curr_date, complaint, related])
-            CONN.commit()
+			CURSOR.execute("INSERT INTO issues VALUES(%s, %s, %s, %s, '', %s)", [int(new_max), int(accId), curr_date, complaint, related])
+			CONN.commit()
+		return redirect(url_for('getComplaints'))
 
-        elif(request.method == 'GET'):
-            issuesQuery = "SELECT issue_date, issue_desc, related FROM issues WHERE acc_id IN (SELECT acc_id FROM account WHERE flat_id=%d) ORDER BY issue_date" % (session['flatId'])
-            CURSOR.execute(issuesQuery)
+	elif(request.method == 'GET'):
+		issuesQuery = "SELECT issue_date, issue_desc, related FROM issues WHERE acc_id IN (SELECT acc_id FROM account WHERE flat_id=%d) ORDER BY issue_date" % (session['flatId'])
+		CURSOR.execute(issuesQuery)
 
-            issuesList = [{'date': str(row[0]), 'desc': row[1], 'related': row[2]} for row in CURSOR.fetchall()]
-        return render_template('user/usercomplaints.html', issuesList = issuesList)
+		issuesList = [{'date': str(row[0]), 'desc': row[1], 'related': row[2]} for row in CURSOR.fetchall()]
+
+		return render_template('user/usercomplaints.html', issuesList = issuesList)

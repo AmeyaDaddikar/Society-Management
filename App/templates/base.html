@@ -2,8 +2,8 @@
 <html lang="en">
 	<head>
 		<title>
-			{% if title %}
-				{{ title }} - 
+			{% if session['username'] %}
+				{{ session['username'] }} - 
 			{% endif %}
 			Society Hub
 		</title>
