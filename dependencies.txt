@@ -46,4 +46,3 @@ zope.deprecation==4.3.0
 zope.event==4.3.0
 zope.interface==4.4.3
 zope.lifecycleevent==4.2.0
-.
