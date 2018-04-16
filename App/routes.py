@@ -34,7 +34,7 @@ def login():
 		password = ''
 
 	accQuery = "SELECT * FROM account \
-				WHERE acc_id = %d && acc_pass = '%s'" % (accId, password)
+				WHERE acc_id = '%s' && acc_pass = '%s'" % (accId, password)
 
 	CURSOR.execute(accQuery)
 
@@ -89,7 +89,7 @@ def userBill():
 
 @app.route('/profile')
 def userProfile():
-		ownerNameQuery = "SELECT owner_name, pending_dues FROM account WHERE acc_id=%d" % (session['userId'])
+		ownerNameQuery = "SELECT owner_name, pending_dues FROM account WHERE acc_id='%s'" % (session['userId'])
 		CURSOR.execute(ownerNameQuery)
 		ownerRes = CURSOR.fetchone()
 		ownerName = ownerRes[0]
