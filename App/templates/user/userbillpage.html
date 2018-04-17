@@ -23,7 +23,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				{% for billEntry in currBill['categories'] %}
+				{% for billEntry in currBill['entries'] %}
 				<tr>
 					<td>{{ billEntry['category'] }}</td>
 					<td>{{ billEntry['cost'] }}</td>

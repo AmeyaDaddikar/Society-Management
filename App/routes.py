@@ -27,32 +27,43 @@ def index():
 @app.route('/loginCheck', methods=['POST'])
 def login():
 
-	accId  = int(request.form['accName'])
+	accId  = request.form['accName']
 	password = request.form['pwd']
 	
 	if password is None or len(password) == 0:
 		password = ''
 
-	accQuery = "SELECT * FROM account \
-				WHERE acc_id = '%s' && acc_pass = '%s'" % (accId, password)
+	if request.form['accOpt'] == 'user':
+		accQuery = "SELECT * FROM account \
+					WHERE acc_id = '%s' && acc_pass = '%s'" % (accId, password)
 
-	CURSOR.execute(accQuery)
+		CURSOR.execute(accQuery)
 
-	if CURSOR.rowcount <= 0:
-		return redirect(url_for('index', loginError=True))
+		if CURSOR.rowcount <= 0:
+			return redirect(url_for('index', loginError=True))
 
 
-	currUser = CURSOR.fetchone()
-	session['username'] = currUser[3]
-	session['userId']   = currUser[0]
-	session['flatId']   = currUser[1]
+		currUser = CURSOR.fetchone()
+		session['username'] = currUser[3]
+		session['userId']   = currUser[0]
+		session['flatId']   = currUser[1]
 
-	societyNameQuery = "SELECT society_name FROM society WHERE society_id in (SELECT society_id FROM flat_addr WHERE flat_id=%d)" % (session['flatId'])
-	CURSOR.execute(societyNameQuery)
+		societyNameQuery = "SELECT society_name FROM society WHERE society_id in (SELECT society_id FROM flat_addr WHERE flat_id=%d)" % (session['flatId'])
+		CURSOR.execute(societyNameQuery)
 
-	session['societyName'] = CURSOR.fetchone()[0]
+		session['societyName'] = CURSOR.fetchone()[0]
 
-	return redirect(url_for('userDashboard'))
+		return redirect(url_for('userDashboard'))
+
+	elif request.form['accOpt'] == 'admin':
+		return redirect(url_for('adminPage'))
+
+	else: return redirect(url_for('index', loginError=True))
+
+
+@app.route('/admin', methods=['GET'])
+def adminPage():
+	return render_template('admin/adminpage.html')
 
 @app.route('/logout', methods=['GET'])
 def logout():
@@ -79,9 +90,10 @@ def userDashboard():
 
 @app.route('/bills')
 def userBill():
+	#billQuery = 'SELECT * FROM '
 	currBill = {}
 	currBill['date'] = "7/2016"
-	currBill['categories'] = [{'category':'WATER CHARGES', 'cost':300},{'category':'MAINTAINANCE CHARGES', 'cost':1000},{'category':'PROPERTY TAX', 'cost':1000},{'category':'ELEC CHARGES', 'cost': 400}]
+	currBill['entries'] = [{'category':'WATER CHARGES', 'cost':300},{'category':'MAINTAINANCE CHARGES', 'cost':1000},{'category':'PROPERTY TAX', 'cost':1000},{'category':'ELEC CHARGES', 'cost': 400}]
 	currBill['amount'] = 2700
 
 	billList = [{'date': currBill['date'], 'amount': currBill['amount']},{'date': "6/2016", 'amount':2500}, {'date':"5/2016", 'amount':2550}]
@@ -178,3 +190,4 @@ def getComplaints():
 		issuesList = [{'date': str(row[0]), 'desc': row[1], 'related': row[2]} for row in CURSOR.fetchall()]
 
 		return render_template('user/usercomplaints.html', issuesList = issuesList)
+

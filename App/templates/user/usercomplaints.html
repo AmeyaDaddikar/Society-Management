@@ -28,7 +28,7 @@
 					<textarea class="form-control" rows="5" id="complaints" name="complaints"></textarea>
 				</div>
 				<input type="submit" class="btn btn-primary btn-lg" style="margin: 1vh 1vh 2vh 1vh;" value="Submit" />
-				<button type="submit" class="btn btn-danger btn-lg" style="margin: 1vh 1vh 2vh 1vh;">Cancel</button>
+				<button type="Cancel" class="btn btn-danger btn-lg" style="margin: 1vh 1vh 2vh 1vh;">Cancel</button>
 			</div>
 		</form>
 		<br/>
@@ -42,13 +42,13 @@
 					</tr>
 				</thead>
 				<tbody>
+				{% for issue in issuesList %}
 					<tr>
-						{% for issue in issuesList %}
 						<td>{{ issue['date'] }}</td>
 						<td>{{ issue['related'] }}</td>
 						<td>{{ issue['desc'] }}</td>
-						{% endfor %}
 					</tr>
+				{% endfor %}
 				</tbody>
 			</table>
 		</div>

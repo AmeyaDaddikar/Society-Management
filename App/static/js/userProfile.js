@@ -1,5 +1,11 @@
 $("#editDetailsModal").ready(function(){
+
+	$(".removeResident").ready(function(){
+		$('[data-toggle="removeResidentTooptip"]').tooltip();
+	});
+	
 	$(".removeResident").click(function(){
-		$(this).parent().remove();
+		let resParentDiv = $(this).parent();
+		resParentDiv.remove();
 	});
 });

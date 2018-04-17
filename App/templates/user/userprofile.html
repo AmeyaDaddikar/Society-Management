@@ -56,12 +56,13 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<h4 class="modal-title">Edit Resident Details</h4>
-					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<a href="/"><button type="button" class="close" data-dismiss="modal">&times;</button></a>
 				</div>
 				<div class="modal-body">
+					<input type="hidden" name="deletedResidents" value="">
 					{% for resident in resList %}
-					<div>
-						<button class="close removeResident">&times;</button>
+					<div id="{{ resident['id'] }}">
+						<button class="close removeResident" data-toggle="removeResidentTooptip" title="Remove Resident">&times;</button>
 						<div class="form-group">
 							<label for="{{ 'NAME ' + resident['id'] }}">Resident Name</label><br/>
 							<input type="text" name="{{ 'NAME ' + resident['id'] }}" id="{{ 'NAME ' + resident['id'] }}" value="{{ resident['name'] }}"/>
@@ -75,7 +76,7 @@
 					{% endfor %}
 				</div>
 				<div class="modal-footer">
-					<button class="btn btn-success">&plus;</button>
+					<button class="btn btn-success" onclick="">&plus;</button>
 					<button class="btn btn-primary">Submit</button>
 				</div>
 			</div>
