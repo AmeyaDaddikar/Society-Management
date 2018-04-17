@@ -1,5 +1,5 @@
 $("#center-paragraph").ready(() => {
-	let centreParagraphText = "Society Hub is a state of the art,\ncustomizable social platform for local community groups."
+	let centreParagraphText = "Society Hub is a state of the art,\ncustomizable social platform for local community groups.";
 
 	let currTextIndex = 0;
 	let centreParagraphElement = document.getElementById("center-paragraph");

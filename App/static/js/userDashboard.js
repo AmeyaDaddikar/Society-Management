@@ -61,7 +61,7 @@ $("#notifBody").ready(function(){
 
 	let clearTable = function(){
 		$("#notifBody").children().remove();
-	}
+	};
 	fetchData();
 	setTimeout(function(){
 	clearTable();
