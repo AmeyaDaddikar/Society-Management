@@ -10,6 +10,7 @@
 }
 .imageContainer div {
 	display: none;
+	z-index: 1;
 }
 .imageContainer:hover, .imageContainer:hover div{
 	opacity: 0.7;

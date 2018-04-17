@@ -1,9 +1,8 @@
-import json
-from . import app
+import json, os, datetime
+from . import app, allowed_file
 from App  import dbconnect
-from flask import render_template, request, redirect, url_for, make_response, session, jsonify
-import datetime
-
+from flask import render_template, request, flash, redirect, url_for, make_response, session, jsonify
+from werkzeug.utils import secure_filename
 # PLEASE USE TABS FOR INDENTS RAO
 
 try:
@@ -191,3 +190,17 @@ def getComplaints():
 
 		return render_template('user/usercomplaints.html', issuesList = issuesList)
 
+
+@app.route('/editProfileImage', methods=['POST'])
+def uploadProfileImage():
+	if 'profImage' in request.files:
+		profImage = request.files['profImage']
+		if profImage and allowed_file(profImage):
+			profFileName = secure_filename(profImage.filename)
+			print(os.path.join(app.config['UPLOAD_FOLDER'], session['societyName'], 'images', profFileName))
+			file.save(os.path.join(app.config['UPLOAD_FOLDER'], session['societyName'], 'images', profFileName))
+
+	else:
+		flash('Invalid Profile Image upload')
+
+	return redirect(url_for('userProfile'))
