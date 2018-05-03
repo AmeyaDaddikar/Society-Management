@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 16, 2018 at 08:07 PM
+-- Generation Time: May 03, 2018 at 12:46 PM
 -- Server version: 10.1.30-MariaDB
 -- PHP Version: 7.2.2
 
@@ -29,7 +29,7 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `account` (
-  `acc_id` varchar(14) NOT NULL,
+  `acc_name` varchar(14) NOT NULL,
   `flat_id` int(11) NOT NULL,
   `acc_pass` varchar(15) NOT NULL,
   `owner_name` varchar(127) NOT NULL,
@@ -41,7 +41,7 @@ CREATE TABLE `account` (
 -- Dumping data for table `account`
 --
 
-INSERT INTO `account` (`acc_id`, `flat_id`, `acc_pass`, `owner_name`, `pending_dues`, `profile_img`) VALUES
+INSERT INTO `account` (`acc_name`, `flat_id`, `acc_pass`, `owner_name`, `pending_dues`, `profile_img`) VALUES
 ('10110', 111, '', 'Vineet', '10500.00', ''),
 ('10120', 112, '', 'Ameya', '12500.00', ''),
 ('10210', 211, '', 'Aman', '15000.00', ''),
@@ -58,6 +58,19 @@ CREATE TABLE `admin` (
   `society_id` int(11) NOT NULL,
   `admin_pass` varchar(15) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `admin_view`
+-- (See below for the actual view)
+--
+CREATE TABLE `admin_view` (
+`resident_id` int(11)
+,`society_id` int(11)
+,`flat_id` int(11)
+,`account_name` varchar(14)
+);
 
 -- --------------------------------------------------------
 
@@ -172,7 +185,7 @@ CREATE TABLE `flat_addr` (
 
 CREATE TABLE `issues` (
   `issue_id` int(11) NOT NULL,
-  `acc_id` varchar(14) NOT NULL,
+  `acc_name` varchar(14) NOT NULL,
   `issue_date` date NOT NULL,
   `issue_desc` varchar(255) NOT NULL,
   `reported_by` varchar(127) NOT NULL,
@@ -183,7 +196,7 @@ CREATE TABLE `issues` (
 -- Dumping data for table `issues`
 --
 
-INSERT INTO `issues` (`issue_id`, `acc_id`, `issue_date`, `issue_desc`, `reported_by`, `related`) VALUES
+INSERT INTO `issues` (`issue_id`, `acc_name`, `issue_date`, `issue_desc`, `reported_by`, `related`) VALUES
 (1, '10110', '2018-04-12', 'Hello World Test! Until now, it refused to allow insertion of new issues', '', 'None'),
 (2, '10110', '2018-04-12', 'Hello', '', 'Stationary'),
 (3, '10110', '2018-04-12', 'Hello', '', 'Stationary'),
@@ -200,8 +213,7 @@ INSERT INTO `issues` (`issue_id`, `acc_id`, `issue_date`, `issue_desc`, `reporte
 CREATE TABLE `maintenance_bill` (
   `bill_num` int(11) NOT NULL,
   `flat_id` int(11) NOT NULL,
-  `month` int(11) NOT NULL,
-  `year` int(11) NOT NULL,
+  `bill_date` date NOT NULL,
   `water_charges` decimal(8,2) NOT NULL,
   `property_tax` decimal(8,2) NOT NULL,
   `elec_charges` decimal(8,2) NOT NULL,
@@ -210,7 +222,8 @@ CREATE TABLE `maintenance_bill` (
   `noc` decimal(8,2) NOT NULL,
   `insurance` decimal(8,2) NOT NULL,
   `other` decimal(8,2) NOT NULL,
-  `due_date` date NOT NULL
+  `due_date` date NOT NULL,
+  `down_doc` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -311,6 +324,15 @@ INSERT INTO `wing` (`wing_id`, `society_id`, `wing_name`, `no_of_floors`, `total
 -- --------------------------------------------------------
 
 --
+-- Structure for view `admin_view`
+--
+DROP TABLE IF EXISTS `admin_view`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `admin_view`  AS  select `admin`.`resident_id` AS `resident_id`,`admin`.`society_id` AS `society_id`,`committee_member`.`flat_no` AS `flat_id`,`account`.`acc_name` AS `account_name` from ((`admin` left join `committee_member` on((`admin`.`resident_id` = `committee_member`.`resident_id`))) left join `account` on((`committee_member`.`flat_no` = `account`.`flat_id`))) ;
+
+-- --------------------------------------------------------
+
+--
 -- Structure for view `flat_addr`
 --
 DROP TABLE IF EXISTS `flat_addr`;
@@ -325,7 +347,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 -- Indexes for table `account`
 --
 ALTER TABLE `account`
-  ADD PRIMARY KEY (`acc_id`),
+  ADD PRIMARY KEY (`acc_name`),
   ADD KEY `flat_acc` (`flat_id`);
 
 --
@@ -367,7 +389,7 @@ ALTER TABLE `flat`
 --
 ALTER TABLE `issues`
   ADD PRIMARY KEY (`issue_id`),
-  ADD KEY `acc_issues` (`acc_id`);
+  ADD KEY `acc_issues` (`acc_name`);
 
 --
 -- Indexes for table `maintenance_bill`
@@ -450,7 +472,7 @@ ALTER TABLE `flat`
 -- Constraints for table `issues`
 --
 ALTER TABLE `issues`
-  ADD CONSTRAINT `acc_issues` FOREIGN KEY (`acc_id`) REFERENCES `account` (`acc_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `acc_issues` FOREIGN KEY (`acc_name`) REFERENCES `account` (`acc_name`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `maintenance_bill`
