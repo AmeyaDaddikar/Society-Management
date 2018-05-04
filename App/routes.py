@@ -14,14 +14,7 @@ except Exception as e:
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
 def index():
-	try:
-		loginError = request.args.get("loginError")
-	except:
-		print("No Login Error")
-		loginError = None
-	
-	print(loginError)
-	return render_template('index.html',loginError=loginError)
+	return render_template('index.html')
 
 @app.route('/loginCheck', methods=['POST'])
 def login():
@@ -39,7 +32,8 @@ def login():
 		CURSOR.execute(accQuery)
 
 		if CURSOR.rowcount <= 0:
-			return redirect(url_for('index', loginError=True))
+			flash('Error')
+			return redirect(url_for('index'))
 
 
 		currUser = CURSOR.fetchone()
@@ -57,7 +51,9 @@ def login():
 	elif request.form['accOpt'] == 'admin':
 		return redirect(url_for('adminPage'))
 
-	else: return redirect(url_for('index', loginError=True))
+	else: 
+		flash('Invalid login details. Please try again.')
+		return redirect(url_for('index'))
 
 
 @app.route('/admin', methods=['GET'])

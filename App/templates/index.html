@@ -4,13 +4,6 @@
 	<link rel="stylesheet" href="static/css/homepage_layout.css">
 	<script src="static/js/indexPage.js"></script>
 	
-	{% if loginError %}
-	<script type="text/javascript">
-		$(window).on("load",function(){
-			$('#loginError').modal('show');
-		});
-	</script>
-	{% endif %}
 	<!--Additional block for child static resources -->
 	{% block indexHtmlIncludes %}{% endblock %}
 	
@@ -93,25 +86,5 @@
 		</div>
 	</div>
 	
-
-
-
-<div class="modal fade" id="loginError" role="dialog">
-	<div class="modal-dialog">
-	<!-- Modal content-->
-		<div class="modal-content">
-			<div class="modal-header">
-				<h4 class="modal-title">Invalid Login</h4>
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-			</div>
-			<div class="modal-body">
-				<p>Invalid account name / password. Please login again.</p>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-			</div>
-		</div>
-		</div>
-</div>
 
 {% endblock %}
