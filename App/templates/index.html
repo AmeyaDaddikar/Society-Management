@@ -44,28 +44,26 @@
 		<div class="row" id="loginDiv">
 			<h1 class="formHeading">Login</h1>
 
-			<form method="post" action="/loginCheck">
+			<form method="post" action="/">
+				{{form.hidden_tag()}}
 				<div class="form-group">
-					<label for="usr">Account ID:</label>
-					<input type="text" class="form-control" name="accName" id="accName" />
+					{{ form.accName.label}}
+					{{ form.accName(class_="form-control") }}
 				</div>
-
 				<div class="form-group">
-					<label for="pwd">Password:</label>
-					<input type="password" class="form-control" name="pwd" id="pwd" />
+					{{ form.password.label}}
+					{{ form.password(class_="form-control") }}
 				</div>
-			
-				<div class="radio">
-					<input type="radio" name="accOpt" value="user"/>
-					<label for="accOpt">Resident Account</label>
+				<div class="form-group">
+					{% for choice in form.accType.choices %}
+					<div class="radio">
+						<input type="radio" name="{{ form.accType.name }}" value="{{ choice[0] }}"/>
+						<label for="{{ form.accType.name }}">{{ choice[1] }}</label>
+					</div>
+					{% endfor %}
 				</div>
-				<div class="radio">
-					<input type="radio" name="accOpt" " value="admin"/>
-					<label for="accOpt">Admin Account</label>
-				</div>
-				<br/>
 				<center>
-					<input type="submit" class="btn btn-light btn-block btn-lg" value="Submit"/>
+					{{ form.submitBtn(class_="btn btn-light btn-block btn-lg") }}
 				</center>
 			</form>
 		</div>

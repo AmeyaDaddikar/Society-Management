@@ -87,12 +87,12 @@
 	<!-- Modal content-->
 		<div class="modal-content">
 			<div class="modal-header">
-				<h4 class="modal-title">Invalid Login</h4>
+				<h4 class="modal-title">Error</h4>
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
 			</div>
 			<div class="modal-body">
 				{% for error in errorMessages%}
-				<p>{{ error }}</p>
+				<p style="text-align: center;">{{ error }}</p>
 				{% endfor %}
 			</div>
 			<div class="modal-footer">

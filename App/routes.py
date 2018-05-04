@@ -1,6 +1,7 @@
 import json, os, datetime
 from . import app, allowed_file
 from App  import dbconnect
+from App.forms import *
 from flask import render_template, request, flash, redirect, url_for, make_response, session, jsonify
 from werkzeug.utils import secure_filename
 # PLEASE USE TABS FOR INDENTS RAO
@@ -12,48 +13,64 @@ except Exception as e:
 	exit()
 
 @app.route('/', methods=['GET', 'POST'])
-@app.route('/index', methods=['GET', 'POST'])
 def index():
-	return render_template('index.html')
+	loginForm = LoginForm(request.form)
+	if request.method == 'POST':
+		if loginForm.validate_on_submit():
+			flash('SUCCESS')
+		else:
+			for error in loginForm.errors.values():
+				flash(str(error[0]))
+
+	return render_template('index.html', form=loginForm)
+
 
 @app.route('/loginCheck', methods=['POST'])
 def login():
-
-	accId  = request.form['accName']
-	password = request.form['pwd']
+	print(request.form)
+	loginForm = LoginForm(request.form)
+	print(loginForm.validate())
+	if loginForm.validate_on_submit():
+		flash('SUCCESS')
+	else:
+		flash('FAILURE')
+	print(loginForm.errors)
+	return redirect(url_for('index'))
+	# accId  = request.form['accName']
+	# password = request.form['pwd']
 	
-	if password is None or len(password) == 0:
-		password = ''
+	# if password is None or len(password) == 0:
+	# 	password = ''
 
-	if request.form['accOpt'] == 'user':
-		accQuery = "SELECT * FROM account \
-					WHERE acc_id = '%s' && acc_pass = '%s'" % (accId, password)
+	# if request.form['accOpt'] == 'user':
+	# 	accQuery = "SELECT * FROM account \
+	# 				WHERE acc_id = '%s' && acc_pass = '%s'" % (accId, password)
 
-		CURSOR.execute(accQuery)
+	# 	CURSOR.execute(accQuery)
 
-		if CURSOR.rowcount <= 0:
-			flash('Error')
-			return redirect(url_for('index'))
+	# 	if CURSOR.rowcount <= 0:
+	# 		flash('Error')
+	# 		return redirect(url_for('index'))
 
 
-		currUser = CURSOR.fetchone()
-		session['username'] = currUser[3]
-		session['userId']   = currUser[0]
-		session['flatId']   = currUser[1]
+	# 	currUser = CURSOR.fetchone()
+	# 	session['username'] = currUser[3]
+	# 	session['userId']   = currUser[0]
+	# 	session['flatId']   = currUser[1]
 
-		societyNameQuery = "SELECT society_name FROM society WHERE society_id in (SELECT society_id FROM flat_addr WHERE flat_id=%d)" % (session['flatId'])
-		CURSOR.execute(societyNameQuery)
+	# 	societyNameQuery = "SELECT society_name FROM society WHERE society_id in (SELECT society_id FROM flat_addr WHERE flat_id=%d)" % (session['flatId'])
+	# 	CURSOR.execute(societyNameQuery)
 
-		session['societyName'] = CURSOR.fetchone()[0]
+	# 	session['societyName'] = CURSOR.fetchone()[0]
 
-		return redirect(url_for('userDashboard'))
+	# 	return redirect(url_for('userDashboard'))
 
-	elif request.form['accOpt'] == 'admin':
-		return redirect(url_for('adminPage'))
+	# elif request.form['accOpt'] == 'admin':
+	# 	return redirect(url_for('adminPage'))
 
-	else: 
-		flash('Invalid login details. Please try again.')
-		return redirect(url_for('index'))
+	# else: 
+	# 	flash('Invalid login details. Please try again.')
+	# 	return redirect(url_for('index'))
 
 
 @app.route('/admin', methods=['GET'])
