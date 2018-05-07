@@ -1,10 +1,9 @@
 import json, os, datetime
+from flask import render_template, request, flash, redirect, url_for, make_response, session, jsonify
+from werkzeug.utils import secure_filename
 from . import app, allowed_file
 from App  import dbconnect
 from App.forms import *
-from flask import render_template, request, flash, redirect, url_for, make_response, session, jsonify
-from werkzeug.utils import secure_filename
-# PLEASE USE TABS FOR INDENTS RAO
 
 try:
 	CONN, CURSOR = dbconnect.connection()
@@ -17,61 +16,16 @@ def index():
 	loginForm = LoginForm(request.form)
 	if request.method == 'POST':
 		if loginForm.validate_on_submit():
-			flash('SUCCESS')
+			if loginForm.accType.data == 'FlatAcc':
+				return redirect(url_for('userDashboard'))
+			else:
+				pass
+				#to-do: REDIRECT TO ADMIN PAGE
 		else:
 			for error in loginForm.errors.values():
 				flash(str(error[0]))
 
 	return render_template('index.html', form=loginForm)
-
-
-@app.route('/loginCheck', methods=['POST'])
-def login():
-	print(request.form)
-	loginForm = LoginForm(request.form)
-	print(loginForm.validate())
-	if loginForm.validate_on_submit():
-		flash('SUCCESS')
-	else:
-		flash('FAILURE')
-	print(loginForm.errors)
-	return redirect(url_for('index'))
-	# accId  = request.form['accName']
-	# password = request.form['pwd']
-	
-	# if password is None or len(password) == 0:
-	# 	password = ''
-
-	# if request.form['accOpt'] == 'user':
-	# 	accQuery = "SELECT * FROM account \
-	# 				WHERE acc_id = '%s' && acc_pass = '%s'" % (accId, password)
-
-	# 	CURSOR.execute(accQuery)
-
-	# 	if CURSOR.rowcount <= 0:
-	# 		flash('Error')
-	# 		return redirect(url_for('index'))
-
-
-	# 	currUser = CURSOR.fetchone()
-	# 	session['username'] = currUser[3]
-	# 	session['userId']   = currUser[0]
-	# 	session['flatId']   = currUser[1]
-
-	# 	societyNameQuery = "SELECT society_name FROM society WHERE society_id in (SELECT society_id FROM flat_addr WHERE flat_id=%d)" % (session['flatId'])
-	# 	CURSOR.execute(societyNameQuery)
-
-	# 	session['societyName'] = CURSOR.fetchone()[0]
-
-	# 	return redirect(url_for('userDashboard'))
-
-	# elif request.form['accOpt'] == 'admin':
-	# 	return redirect(url_for('adminPage'))
-
-	# else: 
-	# 	flash('Invalid login details. Please try again.')
-	# 	return redirect(url_for('index'))
-
 
 @app.route('/admin', methods=['GET'])
 def adminPage():
@@ -79,17 +33,17 @@ def adminPage():
 
 @app.route('/logout', methods=['GET'])
 def logout():
-	session.pop('username', None)
+	session.clear()
 	return redirect(url_for('index'))
 
 @app.route('/refreshNotices', methods=['GET'])
 def getNoticeList():
 
-	noticeQuery = "SELECT * FROM notices WHERE notice_id in (SELECT notice_id FROM flat_addr WHERE flat_id=%d)" % (session['flatId'])
+	noticeQuery = "SELECT * FROM notices \
+					WHERE notice_id in (SELECT notice_id FROM flat_addr WHERE flat_id=%d)" % (session['flatId'])
 	CURSOR.execute(noticeQuery)
 
 	result = CURSOR.fetchall()
-	print(result)
 	noticeList = [{'subject':row[2], 'date':str(row[3]), 'body':row[4]} for row in result]
 	
 	noticeList = json.dumps(noticeList)
@@ -103,12 +57,33 @@ def userDashboard():
 @app.route('/bills')
 def userBill():
 	#billQuery = 'SELECT * FROM '
+	billListQuery = "SELECT due_date, amount, bill_num \
+					FROM maintenance_bill \
+					WHERE flat_id='%d'\
+					ORDER BY due_date DESC" % (session['flatId'])
+
+	CURSOR.execute(billListQuery)
+	latest_bill = CURSOR.fetchone()
+	billList = [{'date': date, 'amount': amount} for (date, amount) in CURSOR.fetchall()]
+	
+	categories = ['WATER CHARGES', 'PROPERTY TAX', 'ELECTRICITY CHARGES', 'SINKING FUNDS', 'PARKING CHARGES', 'NOC', 'INSURANCE', 'OTHER']
+
+	if len(request.args) <= 0:
+		currBillQuery = "SELECT * FROM maintenance_bill WHERE bill_num=%d" % (latest_bill[2])
+	else
+		day   = request.args.get('dd')
+		month = request.args.get('mm')
+		year  = request.args.get('yyyy')
+		currBillQuery = "SELECT * FROM maintenance_bill WHERE due_date='%s'" % ('-'.join((year, month, day)))
+
+	CURSOR.execute(currBillQuery)
+	currBillResult = CURSOR.fetchone()
 	currBill = {}
-	currBill['date'] = "7/2016"
-	currBill['entries'] = [{'category':'WATER CHARGES', 'cost':300},{'category':'MAINTAINANCE CHARGES', 'cost':1000},{'category':'PROPERTY TAX', 'cost':1000},{'category':'ELEC CHARGES', 'cost': 400}]
+	currBill['date'] = currBillResult[11]
+	currBill['entries'] = [{'category':'WATER CHARGES', 'cost':300},{'category':'PROPERTY TAX', 'cost':1000},{'category':'ELEC CHARGES', 'cost': 400}]
 	currBill['amount'] = 2700
 
-	billList = [{'date': currBill['date'], 'amount': currBill['amount']},{'date': "6/2016", 'amount':2500}, {'date':"5/2016", 'amount':2550}]
+	#billList = [{'date': currBill['date'], 'amount': currBill['amount']},{'date': "6/2016", 'amount':2500}, {'date':"5/2016", 'amount':2550}]
 	return render_template('user/userbillpage.html', currBill=currBill, billList=billList)
 
 @app.route('/profile')

@@ -2,8 +2,8 @@
 <html lang="en">
 	<head>
 		<title>
-			{% if session['username'] %}
-				{{ session['username'] }} - 
+			{% if 'ownerName' in session %}
+				{{ session['ownerName'] }} - 
 			{% endif %}
 			Society Hub
 		</title>
@@ -58,9 +58,9 @@
 			</div>
 
 			<!-- IF THE USER ARGUMENT IS P:ASSED< A USER NAME AND LOGO WILL APPEAR-->
-			{% if 'username' in session %}
+			{% if 'ownerName' in session %}
 			<div class="col-md-5">
-				<a class="btn btn-light float-right" style="margin-bottom: 10px;" href="/dashboard" id="userIcon">Welcome {{ session['username'] }}</a>
+				<a class="btn btn-light float-right" style="margin-bottom: 10px;" href="/dashboard" id="userIcon">Welcome {{ session['ownerName'] }}</a>
 			</div>
 			<div class="col-md-1">
 				<a class="btn btn-dark float-right" href="/logout">Logout</a>
