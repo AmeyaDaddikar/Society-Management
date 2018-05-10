@@ -70,7 +70,7 @@ def userBill():
 
 	if len(request.args) <= 0:
 		currBillQuery = "SELECT * FROM maintenance_bill WHERE bill_num=%d" % (latest_bill[2])
-	else
+	else:
 		day   = request.args.get('dd')
 		month = request.args.get('mm')
 		year  = request.args.get('yyyy')
@@ -88,7 +88,7 @@ def userBill():
 
 @app.route('/profile')
 def userProfile():
-		ownerNameQuery = "SELECT owner_name, pending_dues FROM account WHERE acc_id='%s'" % (session['userId'])
+		ownerNameQuery = "SELECT owner_name, pending_dues FROM account WHERE acc_name='%s'" % (session['accName'])
 		CURSOR.execute(ownerNameQuery)
 		ownerRes = CURSOR.fetchone()
 		ownerName = ownerRes[0]
@@ -143,7 +143,7 @@ def getComplaints():
 		print(related)
 		complaint = request.form['complaints']
 		print(complaint)
-		accId = session['userId']
+		accId = session['accName']
 		now = datetime.datetime.now()
 		curr_year = str(now.year)
 		if(now.month < 10):
@@ -171,7 +171,7 @@ def getComplaints():
 		return redirect(url_for('getComplaints'))
 
 	elif(request.method == 'GET'):
-		issuesQuery = "SELECT issue_date, issue_desc, related FROM issues WHERE acc_id IN (SELECT acc_id FROM account WHERE flat_id=%d) ORDER BY issue_date" % (session['flatId'])
+		issuesQuery = "SELECT issue_date, issue_desc, related FROM issues WHERE acc_name IN (SELECT acc_name FROM account WHERE flat_id=%d) ORDER BY issue_date" % (session['flatId'])
 		CURSOR.execute(issuesQuery)
 
 		issuesList = [{'date': str(row[0]), 'desc': row[1], 'related': row[2]} for row in CURSOR.fetchall()]
