@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 03, 2018 at 12:46 PM
+-- Generation Time: May 10, 2018 at 09:41 AM
 -- Server version: 10.1.30-MariaDB
 -- PHP Version: 7.2.2
 
@@ -42,7 +42,7 @@ CREATE TABLE `account` (
 --
 
 INSERT INTO `account` (`acc_name`, `flat_id`, `acc_pass`, `owner_name`, `pending_dues`, `profile_img`) VALUES
-('10110', 111, '', 'Vineet', '10500.00', ''),
+('10110', 111, 'Hello', 'Vineet', '10500.00', ''),
 ('10120', 112, '', 'Ameya', '12500.00', ''),
 ('10210', 211, '', 'Aman', '15000.00', ''),
 ('10220', 212, '', 'Yash', '20000.00', '');
@@ -71,6 +71,28 @@ CREATE TABLE `admin_view` (
 ,`flat_id` int(11)
 ,`account_name` varchar(14)
 );
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `basic_maintenance_bill`
+--
+
+CREATE TABLE `basic_maintenance_bill` (
+  `bill_num` int(11) NOT NULL,
+  `flat_id` int(11) NOT NULL,
+  `bill_date` date NOT NULL,
+  `water_charges` decimal(8,2) NOT NULL,
+  `property_tax` decimal(8,2) NOT NULL,
+  `elec_charges` decimal(8,2) NOT NULL,
+  `sinking_fund` decimal(8,2) NOT NULL,
+  `parking_charges` decimal(8,2) NOT NULL,
+  `noc` decimal(8,2) NOT NULL,
+  `insurance` decimal(8,2) NOT NULL,
+  `other` decimal(8,2) NOT NULL,
+  `due_date` date NOT NULL,
+  `down_doc` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -207,24 +229,25 @@ INSERT INTO `issues` (`issue_id`, `acc_name`, `issue_date`, `issue_desc`, `repor
 -- --------------------------------------------------------
 
 --
--- Table structure for table `maintenance_bill`
+-- Stand-in structure for view `maintenance_bill`
+-- (See below for the actual view)
 --
-
 CREATE TABLE `maintenance_bill` (
-  `bill_num` int(11) NOT NULL,
-  `flat_id` int(11) NOT NULL,
-  `bill_date` date NOT NULL,
-  `water_charges` decimal(8,2) NOT NULL,
-  `property_tax` decimal(8,2) NOT NULL,
-  `elec_charges` decimal(8,2) NOT NULL,
-  `sinking_fund` decimal(8,2) NOT NULL,
-  `parking_charges` decimal(8,2) NOT NULL,
-  `noc` decimal(8,2) NOT NULL,
-  `insurance` decimal(8,2) NOT NULL,
-  `other` decimal(8,2) NOT NULL,
-  `due_date` date NOT NULL,
-  `down_doc` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+`bill_num` int(11)
+,`flat_id` int(11)
+,`bill_date` date
+,`water_charges` decimal(8,2)
+,`property_tax` decimal(8,2)
+,`elec_charges` decimal(8,2)
+,`sinking_fund` decimal(8,2)
+,`parking_charges` decimal(8,2)
+,`noc` decimal(8,2)
+,`insurance` decimal(8,2)
+,`other` decimal(8,2)
+,`due_date` date
+,`amount` decimal(15,2)
+,`down_doc` varchar(255)
+);
 
 -- --------------------------------------------------------
 
@@ -339,6 +362,15 @@ DROP TABLE IF EXISTS `flat_addr`;
 
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `flat_addr`  AS  select `flat`.`flat_id` AS `flat_id`,`wing`.`wing_id` AS `wing_id`,`wing`.`society_id` AS `society_id`,`notices`.`notice_id` AS `notice_id` from ((`flat` join `wing` on((`flat`.`wing_id` = `wing`.`wing_id`))) join `notices` on((`wing`.`society_id` = `notices`.`society_id`))) ;
 
+-- --------------------------------------------------------
+
+--
+-- Structure for view `maintenance_bill`
+--
+DROP TABLE IF EXISTS `maintenance_bill`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `maintenance_bill`  AS  select `basic_maintenance_bill`.`bill_num` AS `bill_num`,`basic_maintenance_bill`.`flat_id` AS `flat_id`,`basic_maintenance_bill`.`bill_date` AS `bill_date`,`basic_maintenance_bill`.`water_charges` AS `water_charges`,`basic_maintenance_bill`.`property_tax` AS `property_tax`,`basic_maintenance_bill`.`elec_charges` AS `elec_charges`,`basic_maintenance_bill`.`sinking_fund` AS `sinking_fund`,`basic_maintenance_bill`.`parking_charges` AS `parking_charges`,`basic_maintenance_bill`.`noc` AS `noc`,`basic_maintenance_bill`.`insurance` AS `insurance`,`basic_maintenance_bill`.`other` AS `other`,`basic_maintenance_bill`.`due_date` AS `due_date`,(((((((`basic_maintenance_bill`.`water_charges` + `basic_maintenance_bill`.`property_tax`) + `basic_maintenance_bill`.`elec_charges`) + `basic_maintenance_bill`.`sinking_fund`) + `basic_maintenance_bill`.`parking_charges`) + `basic_maintenance_bill`.`noc`) + `basic_maintenance_bill`.`insurance`) + `basic_maintenance_bill`.`other`) AS `amount`,`basic_maintenance_bill`.`down_doc` AS `down_doc` from `basic_maintenance_bill` ;
+
 --
 -- Indexes for dumped tables
 --
@@ -356,6 +388,13 @@ ALTER TABLE `account`
 ALTER TABLE `admin`
   ADD PRIMARY KEY (`resident_id`),
   ADD KEY `society_admin` (`society_id`);
+
+--
+-- Indexes for table `basic_maintenance_bill`
+--
+ALTER TABLE `basic_maintenance_bill`
+  ADD PRIMARY KEY (`bill_num`),
+  ADD KEY `flat_bill` (`flat_id`);
 
 --
 -- Indexes for table `committee_member`
@@ -390,13 +429,6 @@ ALTER TABLE `flat`
 ALTER TABLE `issues`
   ADD PRIMARY KEY (`issue_id`),
   ADD KEY `acc_issues` (`acc_name`);
-
---
--- Indexes for table `maintenance_bill`
---
-ALTER TABLE `maintenance_bill`
-  ADD PRIMARY KEY (`bill_num`),
-  ADD KEY `flat_bill` (`flat_id`);
 
 --
 -- Indexes for table `notices`
@@ -444,6 +476,12 @@ ALTER TABLE `admin`
   ADD CONSTRAINT `society_admin` FOREIGN KEY (`society_id`) REFERENCES `society` (`society_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
+-- Constraints for table `basic_maintenance_bill`
+--
+ALTER TABLE `basic_maintenance_bill`
+  ADD CONSTRAINT `flat_bill` FOREIGN KEY (`flat_id`) REFERENCES `flat` (`flat_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
 -- Constraints for table `committee_member`
 --
 ALTER TABLE `committee_member`
@@ -473,12 +511,6 @@ ALTER TABLE `flat`
 --
 ALTER TABLE `issues`
   ADD CONSTRAINT `acc_issues` FOREIGN KEY (`acc_name`) REFERENCES `account` (`acc_name`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Constraints for table `maintenance_bill`
---
-ALTER TABLE `maintenance_bill`
-  ADD CONSTRAINT `flat_bill` FOREIGN KEY (`flat_id`) REFERENCES `flat` (`flat_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `notices`
