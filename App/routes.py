@@ -1,4 +1,5 @@
 import json, os, datetime
+from functools import wraps
 from flask import render_template, request, flash, redirect, url_for, make_response, session, jsonify
 from werkzeug.utils import secure_filename
 from . import app, allowed_file
@@ -11,15 +12,33 @@ except Exception as e:
 	print(e)
 	exit()
 
+def user_login_required(f):
+	@wraps(f)
+	def decorated_function(*args, **kwargs):
+		if 'mainPage' not in session or session['mainPage'] != '/dashboard':
+			flash('Login to access user pages.')
+			return redirect(url_for('index'))
+		return f(*args, **kwargs)
+	return decorated_function
+
+def admin_login_required(f):
+	@wraps(f)
+	def decorated_function(*args, **kwargs):
+		if 'mainPage' not in session or session['mainPage'] != '/admin':
+			flash('Admin login required to complete the request.')
+			return redirect(url_for('index'))
+		return f(*args, **kwargs)
+	return decorated_function
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
 	loginForm = LoginForm(request.form)
 	if request.method == 'POST':
 		if loginForm.validate_on_submit():
 			if loginForm.accType.data == 'FlatAcc':
-				return redirect(url_for('userDashboard'))
+				return redirect(url_for('index'))
 			else:
-				pass
+				return redirect(url_for('adminPage'))
 				#to-do: REDIRECT TO ADMIN PAGE
 		else:
 			for error in loginForm.errors.values():
@@ -28,8 +47,14 @@ def index():
 	return render_template('index.html', form=loginForm)
 
 @app.route('/admin', methods=['GET'])
+@admin_login_required
 def adminPage():
-	return render_template('admin/adminpage.html')
+	addressQuery = "SELECT * FROM society WHERE society_id=%d" % (session['societyId'])
+	CURSOR.execute(addressQuery)
+	addressRes = CURSOR.fetchone()
+	address = [str(addressRes[2]), str(addressRes[3]), str(addressRes[4]), str(addressRes[5])]
+	address = ', '.join(address) + '.'
+	return render_template('admin/adminpage.html', address=address)
 
 @app.route('/logout', methods=['GET'])
 def logout():
@@ -37,6 +62,7 @@ def logout():
 	return redirect(url_for('index'))
 
 @app.route('/refreshNotices', methods=['GET'])
+@user_login_required
 def getNoticeList():
 
 	noticeQuery = "SELECT * FROM notices \
@@ -51,22 +77,32 @@ def getNoticeList():
 
 
 @app.route('/dashboard', methods=['GET'])
+@user_login_required
 def userDashboard():
 	return render_template('user/userdashboard.html')
 
 @app.route('/bills')
+@user_login_required
 def userBill():
-	#billQuery = 'SELECT * FROM '
+	categories = {'WATER CHARGES':3, 'PROPERTY TAX':4, 'ELECTRICITY CHARGES':5, 'SINKING FUNDS':6, 'PARKING CHARGES':7, 'NOC':8, 'INSURANCE':9, 'OTHER':10}
+
 	billListQuery = "SELECT due_date, amount, bill_num \
 					FROM maintenance_bill \
 					WHERE flat_id='%d'\
 					ORDER BY due_date DESC" % (session['flatId'])
 
 	CURSOR.execute(billListQuery)
-	latest_bill = CURSOR.fetchone()
-	billList = [{'date': date, 'amount': amount} for (date, amount) in CURSOR.fetchall()]
-	
-	categories = ['WATER CHARGES', 'PROPERTY TAX', 'ELECTRICITY CHARGES', 'SINKING FUNDS', 'PARKING CHARGES', 'NOC', 'INSURANCE', 'OTHER']
+	billList = CURSOR.fetchall()
+	latest_bill = billList[0]
+	billList = [{'date': bill[0], 'amount': bill[1]} for bill in billList]
+
+	if len(billList) <= 0:
+		currBill = {}
+		currBill['date']    = 'N.A.'
+		currBill['entries'] = [{'category': x, 'cost': 0} for x in categories]
+		currBill['amount']  = 0
+		return render_template('user/userbillpage.html', currBill=currBill, billList=billList)
+
 
 	if len(request.args) <= 0:
 		currBillQuery = "SELECT * FROM maintenance_bill WHERE bill_num=%d" % (latest_bill[2])
@@ -74,19 +110,23 @@ def userBill():
 		day   = request.args.get('dd')
 		month = request.args.get('mm')
 		year  = request.args.get('yyyy')
-		currBillQuery = "SELECT * FROM maintenance_bill WHERE due_date='%s'" % ('-'.join((year, month, day)))
+		
+		billDate      = '-'.join((year, month, day))
+		currBillQuery = "SELECT * FROM maintenance_bill WHERE due_date='%s'" % (billDate)
+
 
 	CURSOR.execute(currBillQuery)
 	currBillResult = CURSOR.fetchone()
 	currBill = {}
 	currBill['date'] = currBillResult[11]
-	currBill['entries'] = [{'category':'WATER CHARGES', 'cost':300},{'category':'PROPERTY TAX', 'cost':1000},{'category':'ELEC CHARGES', 'cost': 400}]
-	currBill['amount'] = 2700
+	currBill['entries'] = [ { 'category' : x, 'cost' : float(currBillResult[categories[x]])} for x in categories]
+	currBill['amount'] = currBillResult[12]
 
-	#billList = [{'date': currBill['date'], 'amount': currBill['amount']},{'date': "6/2016", 'amount':2500}, {'date':"5/2016", 'amount':2550}]
+	print(currBill['entries'])
 	return render_template('user/userbillpage.html', currBill=currBill, billList=billList)
 
 @app.route('/profile')
+@user_login_required
 def userProfile():
 		ownerNameQuery = "SELECT owner_name, pending_dues FROM account WHERE acc_name='%s'" % (session['accName'])
 		CURSOR.execute(ownerNameQuery)
@@ -102,6 +142,7 @@ def userProfile():
 		return render_template('user/userprofile.html', ownerName = ownerName, resList = resList, pendingDues = pendingDues)
 
 @app.route('/editDetails', methods=['POST'])
+@user_login_required
 def updateUserDetails():
 	#DO ALL DATABASE UPDATES HERE
 	for key in request.form.keys():
@@ -134,6 +175,7 @@ def updateUserDetails():
 	return redirect(url_for('userProfile'))
 
 @app.route('/issues', methods=['GET', 'POST'])
+@user_login_required
 def getComplaints():
 	#get the POST DATA from forms if submitted
 	if(request.method == 'POST'):
@@ -180,6 +222,7 @@ def getComplaints():
 
 
 @app.route('/editProfileImage', methods=['POST'])
+@user_login_required
 def uploadProfileImage():
 	if 'profImage' in request.files:
 		profImage = request.files['profImage']

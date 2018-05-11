@@ -31,11 +31,12 @@ class LoginForm(FlaskForm):
 						LEFT JOIN society ON flat_addr.society_id=society.society_id \
 						WHERE acc_name = '%s' && acc_pass = '%s'" % (accName, password)
 
+		# ADMIN TABLE HAS A PASSWORD FIELD, BUT WE ARE CHECKING PASSWORD FROM ACCOUNT TABLE
 		elif self.accType.data == 'AdminAcc':
-			accQuery = "SELECT account_name, flat_id \
-			FROM admin_view LEFT JOIN account \
+			accQuery = 'SELECT account_name, society_id, resident_id \
+			FROM admin_view INNER JOIN account \
 			ON admin_view.account_name=account.acc_name \
-			WHERE acc_name='%s' && acc_pass = '%s'"(accName, password)
+			WHERE acc_name="%s" && acc_pass = "%s"' % (accName, password)
 
 		CURSOR.execute(accQuery)
 		if CURSOR.rowcount <= 0:
@@ -45,13 +46,20 @@ class LoginForm(FlaskForm):
 		currUser = CURSOR.fetchone()
 
 		if self.accType.data == 'FlatAcc':
+			session['mainPage'] = '/dashboard'
 			session['accName']     = currUser[0]
 			session['ownerName']   = currUser[1]
 			session['flatId']      = currUser[2]
 			session['societyName'] = currUser[3]
 			session['societyId']   = currUser[4]
 		else:
-			flash('ADMIN FEATURES YET TO BE IMPLEMENTED')
-			return False
+			session['mainPage'] = '/admin'
+			session['accName']     = currUser[0]
+			session['societyId']   = currUser[1]
+
+			societyAdminQuery = "SELECT society_name FROM society WHERE society_id=%d" % (session['societyId'])
+			CURSOR.execute(societyAdminQuery)
+			session['societyName'] = CURSOR.fetchone()[0]
+			session['ownerName']   = currUser[0]
 
 		return True

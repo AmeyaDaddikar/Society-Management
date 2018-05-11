@@ -1,39 +1,30 @@
 {% extends "base.html" %}
 
 {% block headIncludes %}
-	
+	<link rel="stylesheet" href="static/css/adminpage_layout.css">
 	{% block adminPageIncludes %}{% endblock %}
 	
 {% endblock %}
 
 {% block content %}
-<div class="container-fluid">
-	<h1>\{\{societyName}}</h1>
-	<div class="container row">
-		<div class="col-md-8">
-			<h2>Issues List</h2>
-			<table class="table">
-				<thead>
-					<tr>
-						<th>ISSUE</th>
-						<th></th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td></td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-		<div class="col-md-4">
 
-		</div>
+<div class="container-fluid">
+	<div class=" container-fluid society-details-div">
+		<h1>{{ session['societyName'] }}</h1>
+		<h2>
+			{{ address }}
+		</h2>
+		<div style="overflow-x: auto;">
+			<div class="btn-group">
+				<button type="button" class="btn btn-dark">Residents &nbsp;<span class="badge badge-secondary">5</span></button>
+				<button type="button" class="btn btn-dark">Flats     &nbsp;<span class="badge badge-secondary">5</span></button>
+				<button type="button" class="btn btn-dark">Wings     &nbsp;<span class="badge badge-secondary">5</span></button>
+				<button type="button" class="btn btn-dark">Admins    &nbsp;<span class="badge badge-secondary">5</span></button>
+				<button type="button" class="btn btn-dark">Wings     &nbsp;<span class="badge badge-secondary">5</span></button>
+			</div>
+		</div> 
 	</div>
-				<h2>Resident List</h2>
-			<table class="table">
-				
-			</table>
 
 </div>
+
 {% endblock %}
