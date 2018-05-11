@@ -1,0 +1,16 @@
+.society-details-div {
+	padding: 6vh 5vw 6vh 5vw;
+	background-color: #e0e0eb;
+	margin: auto;
+	margin-top: 3vh;
+	margin-bottom: 3vh;
+}
+
+.society-details-div h1 {
+	color : #24248f;
+	font-size: 3em;
+}
+.society-details-div h2 {
+	color : #595959;
+	font-size: 1.5em;
+} 
