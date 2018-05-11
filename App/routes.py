@@ -36,7 +36,7 @@ def index():
 	if request.method == 'POST':
 		if loginForm.validate_on_submit():
 			if loginForm.accType.data == 'FlatAcc':
-				return redirect(url_for('index'))
+				return redirect(url_for('userDashboard'))
 			else:
 				return redirect(url_for('adminPage'))
 				#to-do: REDIRECT TO ADMIN PAGE
