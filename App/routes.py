@@ -2,7 +2,7 @@ import json, os, datetime
 from functools import wraps
 from flask import render_template, request, flash, redirect, url_for, make_response, session, jsonify
 from werkzeug.utils import secure_filename
-from . import app, allowed_file
+from . import app, allowed_file, read_file
 from App  import dbconnect
 from App.forms import *
 
@@ -151,11 +151,14 @@ def userBill():
 @app.route('/profile')
 @user_login_required
 def userProfile():
-		ownerNameQuery = "SELECT owner_name, pending_dues FROM account WHERE acc_name='%s'" % (session['accName'])
+		ownerNameQuery = "SELECT owner_name, pending_dues, profile_img FROM account WHERE acc_name='%s'" % (session['accName'])
 		CURSOR.execute(ownerNameQuery)
-		ownerRes = CURSOR.fetchone()
-		ownerName = ownerRes[0]
+		ownerRes    = CURSOR.fetchone()
+		ownerName   = ownerRes[0]
 		pendingDues = ownerRes[1]
+		profImage   = ownerRes[2]
+
+		print(profImage)
 
 		residentQuery = "SELECT resident_name, resident_id FROM resident WHERE flat_id=%d" % (session['flatId'])
 		CURSOR.execute(residentQuery)
@@ -249,12 +252,22 @@ def getComplaints():
 def uploadProfileImage():
 	if 'profImage' in request.files:
 		profImage = request.files['profImage']
-		if profImage and allowed_file(profImage):
-			profFileName = secure_filename(profImage.filename)
-			print(os.path.join(app.config['UPLOAD_FOLDER'], session['societyName'], 'images', profFileName))
-			file.save(os.path.join(app.config['UPLOAD_FOLDER'], session['societyName'], 'images', profFileName))
+
+		if profImage and allowed_file(profImage.filename):
+			profImage = profImage.read()
+
+			removeOldProfFileQuery = 'UPDATE account SET profile_img=NULL WHERE acc_name="%s"' % (session['accName'])
+			CURSOR.execute(removeOldProfFileQuery)
+
+			uploadProfFileQuery = 'UPDATE account SET profile_img=%s WHERE acc_name="%s"' % (profImage, session['accName'])
+			CURSOR.execute(uploadProfFileQuery)
+		else:
+			flash('Invalid file format.')
+			#image = read_file(profImage)
+			#print(os.path.join(app.config['UPLOAD_FOLDER'], session['societyName'], 'images', profFileName))
+
 
 	else:
-		flash('Invalid Profile Image upload')
+		flash('Invalid / Empty file uploaded. Try again')
 
 	return redirect(url_for('userProfile'))
