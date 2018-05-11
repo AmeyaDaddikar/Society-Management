@@ -54,7 +54,30 @@ def adminPage():
 	addressRes = CURSOR.fetchone()
 	address = [str(addressRes[2]), str(addressRes[3]), str(addressRes[4]), str(addressRes[5])]
 	address = ', '.join(address) + '.'
-	return render_template('admin/adminpage.html', address=address)
+
+	statsCounter = {'residents': 0, 'flats':0, 'wings': 0, 'admins':0}
+
+	wingsQuery = "SELECT wing_id FROM wing WHERE society_id=%d" % (session['societyId'])
+	CURSOR.execute(wingsQuery)
+	wings = CURSOR.fetchall()
+	statsCounter['wings'] = len(wings)
+	flats = []
+	if statsCounter['wings'] > 0:
+		flatsQuery = "SELECT flat_id FROM flat WHERE wing_id in (%s)" % (','.join([str(x[0]) for x in wings]))
+		CURSOR.execute(flatsQuery)
+		flats = CURSOR.fetchall()
+		statsCounter['flats'] = len(flats)
+
+	if len(flats) > 0:
+		residentsQuery = "SELECT COUNT(resident_id) FROM resident WHERE flat_id IN (%s)" % (','.join([str(x[0]) for x in flats]))
+		CURSOR.execute(residentsQuery)
+		statsCounter['residents'] = CURSOR.fetchone()[0]
+
+	adminCountQuery = "SELECT COUNT(resident_id) FROM admin WHERE society_id=%d" % (session['societyId'])
+	CURSOR.execute(adminCountQuery)
+	statsCounter['admins'] = CURSOR.fetchone()[0]
+	
+	return render_template('admin/adminpage.html', address=address, counter=statsCounter)
 
 @app.route('/logout', methods=['GET'])
 def logout():
