@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 10, 2018 at 09:41 AM
+-- Generation Time: May 10, 2018 at 01:42 PM
 -- Server version: 10.1.30-MariaDB
 -- PHP Version: 7.2.2
 
@@ -472,7 +472,7 @@ ALTER TABLE `account`
 -- Constraints for table `admin`
 --
 ALTER TABLE `admin`
-  ADD CONSTRAINT `member_admin` FOREIGN KEY (`resident_id`) REFERENCES `committee_member` (`resident_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `member_admin` FOREIGN KEY (`resident_id`) REFERENCES `committee_member` (`resident_id`),
   ADD CONSTRAINT `society_admin` FOREIGN KEY (`society_id`) REFERENCES `society` (`society_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
