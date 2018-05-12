@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 10, 2018 at 01:42 PM
+-- Generation Time: May 12, 2018 at 11:03 AM
 -- Server version: 10.1.30-MariaDB
 -- PHP Version: 7.2.2
 
@@ -34,7 +34,7 @@ CREATE TABLE `account` (
   `acc_pass` varchar(15) NOT NULL,
   `owner_name` varchar(127) NOT NULL,
   `pending_dues` decimal(10,2) NOT NULL,
-  `profile_img` mediumblob
+  `profile_img` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -394,6 +394,7 @@ ALTER TABLE `admin`
 --
 ALTER TABLE `basic_maintenance_bill`
   ADD PRIMARY KEY (`bill_num`),
+  ADD UNIQUE KEY `bill_date` (`bill_date`),
   ADD KEY `flat_bill` (`flat_id`);
 
 --
