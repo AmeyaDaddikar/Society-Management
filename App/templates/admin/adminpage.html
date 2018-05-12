@@ -24,6 +24,89 @@
 		</div> 
 	</div>
 
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-6">
+				<h1>Add Notices</h1>
+				<div class="container">
+					<form method="post" action="{{url_for('addNotice')}}">
+						{{noticeForm.hidden_tag()}}
+						<div class="form-group">
+							{{ noticeForm.header.label}}
+							{{ noticeForm.header(class_="form-control") }}
+						</div>
+						<div class="form-group">
+							{{ noticeForm.date.label}}
+							{{ noticeForm.date(class_="form-control") }}
+						</div>
+						<div class="form-group">
+							{{ noticeForm.body.label}}
+							{{ noticeForm.body(class_="form-control") }}
+						</div>
+						<center>
+						{{ noticeForm.submitBtn(class_="btn btn-light btn-block btn-lg") }}
+						</center>
+						<br/><br/><br/>
+					</form>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="container">
+					<h1>Add Bill</h1>
+					<form method="post" action="{{url_for('addBill')}}">
+						{{billForm.hidden_tag()}}
+						<div class="form-group">
+							{{ billForm.billDate.label }}
+							{{ billForm.billDate(class_="form-control") }}
+						</div>
+						<div class="form-group">
+							{{ billForm.dueDate.label }}
+							{{ billForm.dueDate(class_="form-control") }}
+						</div>
+						<div class="form-group">
+							{{ billForm.WATER_CHARGES.label }}
+							{{ billForm.WATER_CHARGES(class_="form-control") }}
+						</div>
+						<div class="form-group">
+							{{ billForm.PROPERTY_TAX.label }}
+							{{ billForm.PROPERTY_TAX(class_="form-control") }}
+						</div>
+						<div class="form-group">
+							{{ billForm.ELECTRICITY_CHARGES.label }}
+							{{ billForm.ELECTRICITY_CHARGES(class_="form-control") }}
+						</div>
+						<div class="form-group">
+							{{ billForm.SINKING_FUNDS.label }}
+							{{ billForm.SINKING_FUNDS(class_="form-control") }}
+						</div>
+						<div class="form-group">
+							{{ billForm.PARKING_CHARGES.label }}
+							{{ billForm.PARKING_CHARGES(class_="form-control") }}
+						</div>
+						<div class="form-group">
+							{{ billForm.NOC.label }}
+							{{ billForm.NOC(class_="form-control") }}
+						</div>
+						<div class="form-group">
+							{{ billForm.INSURANCE.label }}
+							{{ billForm.INSURANCE(class_="form-control") }}
+						</div>
+						<div class="form-group">
+							{{ billForm.OTHER.label }}
+							{{ billForm.OTHER(class_="form-control") }}
+						</div>
+
+						<center>
+						{{ noticeForm.submitBtn(class_="btn btn-light btn-block btn-lg") }}
+						</center>
+						<br/><br/><br/>
+					</form>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
 </div>
 
 {% endblock %}

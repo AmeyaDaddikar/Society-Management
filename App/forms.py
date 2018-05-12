@@ -1,7 +1,8 @@
 from flask_wtf import Form, FlaskForm
-from wtforms import StringField, PasswordField, RadioField, SubmitField
+from wtforms import StringField, PasswordField, RadioField, SubmitField, DateField, FloatField, DecimalField
+from wtforms.widgets import TextArea
 from wtforms import validators
-from wtforms.validators import DataRequired
+from wtforms.validators import DataRequired, Optional
 from flask import flash, session
 from App  import dbconnect
 
@@ -63,3 +64,33 @@ class LoginForm(FlaskForm):
 			session['ownerName']   = currUser[0]
 
 		return True
+
+class AddNoticeForm(FlaskForm):
+	header  = StringField(label='Title/Subject', validators=[validators.Length(min=3, max=63, message='Invalid header')])
+	date    = DateField('Date', format='%Y-%m-%d', validators=[DataRequired()])
+	body    = StringField('Descripion', widget=TextArea(), validators=[DataRequired()])
+	submitBtn = SubmitField(label='Submit')
+
+	def validate(self):
+		validInput = FlaskForm.validate(self)
+		if not validInput:
+			return False
+		flash('Add this to DB Rao')
+		return True
+
+#Categories and their corresponding indices upon * request of maintenance_bill
+#categories = {'WATER CHARGES':3, 'PROPERTY TAX':4, 'ELECTRICITY CHARGES':5, 'SINKING FUNDS':6, 'PARKING CHARGES':7, 'NOC':8, 'INSURANCE':9, 'OTHER':10}
+
+class AddBillForm(FlaskForm):
+	billDate    = DateField('Bill Date', format='%Y-%m-%d', validators=[DataRequired()])
+	dueDate     = DateField('Due Date',  format='%Y-%m-%d', validators=[DataRequired()])
+
+	WATER_CHARGES		=DecimalField(label='WATER CHARGES'       ,places=2, validators=[DataRequired()])
+	PROPERTY_TAX		=DecimalField(label='PROPERTY TAX'        ,places=2, validators=[DataRequired()])
+	ELECTRICITY_CHARGES=DecimalField(label='ELECTRICITY CHARGES',places=2, validators=[DataRequired()])
+	SINKING_FUNDS		=DecimalField(label='SINKING FUNDS'       ,places=2, validators=[DataRequired()])
+	PARKING_CHARGES		=DecimalField(label='PARKING CHARGES'     ,places=2, validators=[DataRequired()])
+	NOC					=DecimalField(label='NOC'       ,places=2, validators=[DataRequired()])
+	INSURANCE			=DecimalField(label='INSURANCE' ,places=2, validators=[DataRequired()])
+	OTHER				=DecimalField(label='OTHER'     ,places=2, validators=[Optional()])
+	submitBtn = SubmitField(label='Submit')

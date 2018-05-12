@@ -77,7 +77,32 @@ def adminPage():
 	CURSOR.execute(adminCountQuery)
 	statsCounter['admins'] = CURSOR.fetchone()[0]
 	
-	return render_template('admin/adminpage.html', address=address, counter=statsCounter)
+	newNoticeForm = AddNoticeForm (request.form)
+	newBillForm   = AddBillForm   (request.form)
+
+	return render_template('admin/adminpage.html', address=address, counter=statsCounter, noticeForm=newNoticeForm, billForm=newBillForm)
+
+@app.route('/addNotice', methods=['POST'])
+@admin_login_required
+def addNotice():
+	submittedNotice = AddNoticeForm(request.form)
+
+	if submittedNotice.validate_on_submit():
+		flash('Added Notice')
+	flash('Error Notice')
+	return redirect(url_for('adminPage'))
+
+@app.route('/addBill', methods=['POST'])
+@admin_login_required
+def addBill():
+	submittedBill = AddBillForm(request.form)
+
+	if submittedBill.validate_on_submit():
+		flash('Added bill')
+	flash('Error bill')
+
+	return redirect(url_for('adminPage'))
+
 
 @app.route('/logout', methods=['GET'])
 def logout():
