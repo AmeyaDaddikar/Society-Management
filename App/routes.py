@@ -5,6 +5,7 @@ from werkzeug.utils import secure_filename
 from . import app, allowed_file, read_file
 from App  import dbconnect
 from App.forms import *
+from random import randint
 
 try:
 	CONN, CURSOR = dbconnect.connection()
@@ -79,7 +80,11 @@ def adminPage():
 	
 	newNoticeForm = AddNoticeForm (request.form)
 	newBillForm   = AddBillForm   (request.form)
-	newBillForm.selectedWings.choices = []	# Add choices list here Rao
+
+	wingsQuery = "SELECT wing_id, wing_name FROM wing WHERE society_id=%d" % (session['societyId'])
+	CURSOR.execute(wingsQuery)
+
+	newBillForm.selectedWings.choices = [(str(x[0]), str(x[1])) for x in CURSOR.fetchall()]
 
 	return render_template('admin/adminpage.html', address=address, counter=statsCounter, noticeForm=newNoticeForm, billForm=newBillForm)
 
@@ -115,8 +120,7 @@ def logout():
 @user_login_required
 def getNoticeList():
 
-	noticeQuery = "SELECT * FROM notices \
-					WHERE notice_id in (SELECT notice_id FROM notice_wing JOIN flat USING(wing_id) WHERE flat_id=%d)" % (session['flatId'])
+	noticeQuery = "SELECT * FROM notices WHERE notices.society_id=%d " % (session['societyId'])
 	CURSOR.execute(noticeQuery)
 
 	result = CURSOR.fetchall()
@@ -143,8 +147,10 @@ def userBill():
 
 	CURSOR.execute(billListQuery)
 	billList = CURSOR.fetchall()
-	latest_bill = billList[0]
-	billList = [{'date': bill[0], 'amount': bill[1]} for bill in billList]
+	
+	if len(billList) > 0:
+		latest_bill = billList[0]
+		billList = [{'date': bill[0], 'amount': bill[1]} for bill in billList]
 
 	if len(billList) <= 0:
 		currBill = {}
@@ -191,40 +197,17 @@ def userProfile():
 		CURSOR.execute(residentQuery)
 
 		resList = [{'name' :row[0], 'phone': str(1234), 'id': str(row[1])} for row in CURSOR.fetchall()]
-
-		return render_template('user/userprofile.html', ownerName = ownerName, resList = resList, pendingDues = pendingDues)
+		residentForm = AddResident(request.form)
+		return render_template('user/userprofile.html', ownerName = ownerName, resList = resList, pendingDues = pendingDues, residentForm=residentForm)
 
 @app.route('/editDetails', methods=['POST'])
 @user_login_required
 def updateUserDetails():
-	#DO ALL DATABASE UPDATES HERE
-	for key in request.form.keys():
-		print(key)
-        # print("Hello")
-        # new_owner=request.form['NameRes1']
-        # new_contact=int(request.form['NumRes1'])
-        # print(new_owner)
-        # print(new_contact)
-        # check_present_query = "SELECT resident_id, contact FROM resident WHERE resident_name='%s' AND flat_id=%d" % (new_owner, session['flatId'])
-        # CURSOR.execute(check_present_query)
-        # if(CURSOR.rowcount <= 0):
-        #     check_max_query = "SELECT MAX(resident_id) FROM resident"
-        #     CURSOR.execute(check_max_query)
-        #     curr_max = CURSOR.fetchone()
-        #     new_max = curr_max[0] + 1
-        #     print(new_max)
-        #     #new_res_query = "INSERT INTO resident VALUES(%d, %d, '%s', %d)" % (new_max, session['flatId'], new_owner, new_contact)
-        #     #CURSOR.execute(new_res_query)
-        #     CURSOR.execute("INSERT INTO resident VALUES(%s, %s, %s, %s)", [int(new_max), int(session['flatId']), new_owner, new_contact])
-        #     CONN.commit()
-        # else:
-        #     r = CURSOR.fetchone()
-        #     res_id = r[0]
-        #     old_contact = r[1]
-        #     if(new_contact != old_contact):
-        #         new_cont_query = "UPDATE resident SET contact=%d WHERE resident_id=%d" % (new_contact, res_id) 
-        #         CURSOR.execute(new_cont_query)
-        #         CONN.commit()
+	residentForm  = AddResident(request.form)
+	newResidentId = randint(1, 999999)
+
+	addResQuery = "INSERT INTO resident VALUES ( %d, %d, '%s', %d)" % (newResidentId, session['flatId'], residentForm.name.data, residentForm.contact.data)
+	CURSOR.execute(addResQuery)
 	return redirect(url_for('userProfile'))
 
 @app.route('/issues', methods=['GET', 'POST'])
@@ -294,7 +277,7 @@ def uploadProfileImage():
 @app.route('/signup', methods=['GET'])
 def signupPages():
 	#FIRST TIME OPENING PAGE
-	session['pageCount'] = 2
+	session['pageCount'] = 3
 	if 'pageCount' not in session or session['pageCount'] == 1:
 		session['pageCount'] = 1
 		societyForm = AddSocietyForm(request.form)
@@ -308,9 +291,7 @@ def signupPages():
 
 	elif session['pageCount'] == 3:
 		totalWings   = 5
-		flatsPerWing = 2
+		flatsPerWing = 3
 
-		wingFlats = WingFlats(wingId=wingId, wings=[{} for x in range(flatsPerWing)])
+		wingFlats = WingFlats(wingId=1, flats=[{'flatNum' : 0,'flatFacing': 'NULL','area':0,'BHK':1,'floorNum':0,'price':0} for x in range(flatsPerWing)])
 		return render_template('signup/flatSetupPage.html',wingFlats=wingFlats)
-
-
