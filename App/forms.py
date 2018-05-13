@@ -89,7 +89,7 @@ class AddNoticeForm(FlaskForm):
 class AddBillForm(FlaskForm):
 	billDate      = DateField('Bill Date', format='%Y-%m-%d', validators=[DataRequired()])
 	dueDate       = DateField('Due Date',  format='%Y-%m-%d', validators=[DataRequired()])
-	selectedWings = SelectMultipleField('Wings', validators=[DataRequired()])
+	selectedWings = SelectMultipleField('Wings', choices=[], validators=[DataRequired()])
 	WATER_CHARGES		=DecimalField(label='WATER CHARGES'       ,places=2, validators=[DataRequired()])
 	PROPERTY_TAX		=DecimalField(label='PROPERTY TAX'        ,places=2, validators=[DataRequired()])
 	ELECTRICITY_CHARGES=DecimalField(label='ELECTRICITY CHARGES',places=2, validators=[DataRequired()])
