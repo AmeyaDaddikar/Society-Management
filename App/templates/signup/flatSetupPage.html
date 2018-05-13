@@ -20,7 +20,7 @@
 	</div>
 	<div class="container" style="max-width: 700px;">
 		<form method="post" action="#addWings">
-			{{wingFlats.hidden_tag()}}
+			{{ wingFlats.hidden_tag() }}
 			{{ wingFlats.wingId }}
 			{% for flat in wingFlats.flats %}
 			<hr/>
@@ -29,7 +29,7 @@
 			{{ flat.flatNum.label }}
 			{{ flat.flatNum(class_="form-control") }}
 			{{ flat.flatFacing.label }}
-			{{ flat.flatFacing(class_="form-control") }}totalFlats
+			{{ flat.flatFacing(class_="form-control") }}
 			{{ flat.area.label }}
 			{{ flat.area(class_="form-control") }}
 			{{ flat.BHK.label }}

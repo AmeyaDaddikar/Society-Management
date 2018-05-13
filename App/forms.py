@@ -6,6 +6,7 @@ from wtforms import validators
 from wtforms.validators import DataRequired, Optional
 from flask import flash, session
 from App  import dbconnect
+from random import randint
 
 try:
 	CONN, CURSOR = dbconnect.connection()
@@ -29,8 +30,9 @@ class LoginForm(FlaskForm):
 
 		if self.accType.data == 'FlatAcc':
 			accQuery = "SELECT account.acc_name, account.owner_name, account.flat_id, society.society_name, society.society_id FROM account \
-						LEFT JOIN flat_addr ON account.flat_id=flat_addr.flat_id \
-						LEFT JOIN society ON flat_addr.society_id=society.society_id \
+						INNER JOIN flat ON account.flat_id=flat.flat_id \
+						INNER JOIN wing ON flat.wing_id=wing.wing_id \
+						INNER JOIN society ON wing.society_id=society.society_id \
 						WHERE acc_name = '%s' && acc_pass = '%s'" % (accName, password)
 
 		# ADMIN TABLE HAS A PASSWORD FIELD, BUT WE ARE CHECKING PASSWORD FROM ACCOUNT TABLE
@@ -128,4 +130,9 @@ class AddFlatForm(FlaskForm):
 class WingFlats(FlaskForm):
 	wingId    = HiddenField("wingId")
 	flats     = FieldList(FormField(AddFlatForm, 'flat'), min_entries=1)
+	submitBtn = SubmitField(label='Submit')
+
+class AddResident(FlaskForm):
+	name    = StringField (label='Name', validators=[DataRequired()])
+	contact = IntegerField(label='Contact', validators=[DataRequired()])
 	submitBtn = SubmitField(label='Submit')
