@@ -1,3 +1,4 @@
+import datetime
 from flask_wtf import Form, FlaskForm
 from wtforms import StringField, PasswordField, RadioField, SubmitField, DateField, FloatField, DecimalField
 from wtforms.widgets import TextArea
@@ -34,10 +35,9 @@ class LoginForm(FlaskForm):
 
 		# ADMIN TABLE HAS A PASSWORD FIELD, BUT WE ARE CHECKING PASSWORD FROM ACCOUNT TABLE
 		elif self.accType.data == 'AdminAcc':
-			accQuery = 'SELECT account_name, society_id, resident_id \
-			FROM admin_view INNER JOIN account \
-			ON admin_view.account_name=account.acc_name \
-			WHERE acc_name="%s" && acc_pass = "%s"' % (accName, password)
+			accQuery = 'SELECT acc_name, society_id, resident_id \
+			FROM admin \
+			WHERE acc_name="%s" && admin_pass = "%s"' % (accName, password)
 
 		CURSOR.execute(accQuery)
 		if CURSOR.rowcount <= 0:
@@ -75,7 +75,10 @@ class AddNoticeForm(FlaskForm):
 		validInput = FlaskForm.validate(self)
 		if not validInput:
 			return False
-		flash('Add this to DB Rao')
+		# flash('Add this to DB Rao')
+		CURSOR.execute("INSERT INTO notices(society_id, notice_header, notice_date, notice_desc) VALUES (%s, %s, %s, %s)", [int(session['societyId']), self.header.data, self.date.data, self.body.data])
+		CONN.commit()
+		print("Hello World!")
 		return True
 
 #Categories and their corresponding indices upon * request of maintenance_bill

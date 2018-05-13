@@ -16,7 +16,7 @@ def user_login_required(f):
 	@wraps(f)
 	def decorated_function(*args, **kwargs):
 		if 'mainPage' not in session or session['mainPage'] != '/dashboard':
-			flash('Login to access user pages.')
+			flash('InLogin to access user pages.')
 			return redirect(url_for('index'))
 		return f(*args, **kwargs)
 	return decorated_function
@@ -87,9 +87,9 @@ def adminPage():
 def addNotice():
 	submittedNotice = AddNoticeForm(request.form)
 
-	if submittedNotice.validate_on_submit():
-		flash('Added Notice')
-	flash('Error Notice')
+	if not submittedNotice.validate_on_submit():
+		for error in submittedNotice.errors.values():
+			flash(str(error[0]))
 	return redirect(url_for('adminPage'))
 
 @app.route('/addBill', methods=['POST'])
@@ -99,7 +99,8 @@ def addBill():
 
 	if submittedBill.validate_on_submit():
 		flash('Added bill')
-	flash('Error bill')
+	else:
+		flash('Error bill')
 
 	return redirect(url_for('adminPage'))
 
@@ -109,12 +110,12 @@ def logout():
 	session.clear()
 	return redirect(url_for('index'))
 
-@app.route('/refreshNotices', methods=['GET'])
+@app.route('/refreshNotices', methods=['GET', 'POST'])
 @user_login_required
 def getNoticeList():
 
 	noticeQuery = "SELECT * FROM notices \
-					WHERE notice_id in (SELECT notice_id FROM flat_addr WHERE flat_id=%d)" % (session['flatId'])
+					WHERE notice_id in (SELECT notice_id FROM notice_wing JOIN flat USING(wing_id) WHERE flat_id=%d)" % (session['flatId'])
 	CURSOR.execute(noticeQuery)
 
 	result = CURSOR.fetchall()
@@ -255,11 +256,10 @@ def getComplaints():
 		curr_max = CURSOR.fetchone()
 		print(curr_max)
 		if curr_max[0] is not None:
-			new_max = curr_max[0] + 1
-			print(new_max)
+			# print(new_max)
             #new_issue_query = "INSERT INTO issues VALUES(%d, %d, '%s', '%s', '', '%s')" % (new_max, accId, curr_date, complaint, related)
             #CURSOR.execute(new_issue_query)
-			CURSOR.execute("INSERT INTO issues VALUES(%s, %s, %s, %s, '', %s)", [int(new_max), int(accId), curr_date, complaint, related])
+			CURSOR.execute("INSERT INTO issues(acc_name, issue_date, issue_desc, reported_by, related) VALUES(%s, %s, %s, '', %s)", [int(accId), curr_date, complaint, related])
 			CONN.commit()
 		return redirect(url_for('getComplaints'))
 
@@ -284,8 +284,9 @@ def uploadProfileImage():
 			removeOldProfFileQuery = 'UPDATE account SET profile_img=NULL WHERE acc_name="%s"' % (session['accName'])
 			CURSOR.execute(removeOldProfFileQuery)
 
-			uploadProfFileQuery = 'UPDATE account SET profile_img=%s WHERE acc_name="%s"' % (profImage, session['accName'])
-			CURSOR.execute(uploadProfFileQuery)
+			uploadProfFileQuery = "UPDATE account SET profile_img=%s WHERE acc_name=%s"
+			args = (profImage, session['accName'])
+			CURSOR.execute(uploadProfFileQuery, args)
 		else:
 			flash('Invalid file format.')
 			#image = read_file(profImage)

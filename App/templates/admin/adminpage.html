@@ -34,18 +34,28 @@
 						<div class="form-group">
 							{{ noticeForm.header.label}}
 							{{ noticeForm.header(class_="form-control") }}
+                            <br>
+                            {% for error in noticeForm.header.errors %}
+                            <span style="color:red;">[{{ error }}]</span>
+                            {% endfor %}
 						</div>
 						<div class="form-group">
 							{{ noticeForm.date.label}}
 							{{ noticeForm.date(class_="form-control") }}
+                            <br>
+                            {% for error in noticeForm.date.errors %}
+                            <span style="color:red;">[{{ error }}]</span>
+                            {% endfor %}
 						</div>
 						<div class="form-group">
 							{{ noticeForm.body.label}}
 							{{ noticeForm.body(class_="form-control") }}
+                            <br>
+                            {% for error in noticeForm.body.errors %}
+                            <span style="color:red;">[{{ error }}]</span>
+                            {% endfor %}
 						</div>
-						<center>
 						{{ noticeForm.submitBtn(class_="btn btn-light btn-block btn-lg") }}
-						</center>
 						<br/><br/><br/>
 					</form>
 				</div>
