@@ -302,8 +302,9 @@ def uploadProfileImage():
 def signupPages():
 	#FIRST TIME OPENING PAGE
 	if request.method == 'GET':
+		societyForm = AddSocietyForm(request.form)
 		session['pageCount'] = 1
-		return render_template('signup/societySetupPage.html')
+		return render_template('signup/societySetupPage.html', societyForm=societyForm)
 	# else:
 	# 	#WENT BACK TO PAGE 1
 	# 	if session['pageCount'] == 1:

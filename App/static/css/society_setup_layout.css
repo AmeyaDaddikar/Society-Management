@@ -26,3 +26,15 @@
 .img-container img {
 	max-width: 80vw;
 }
+
+.formHeading {
+	color:#cc66ff;
+	font-family:inherit;
+	text-shadow: 2px 2px #6946d2;
+	font-size: 350%;
+	text-align:center;
+}
+
+.formDiv {
+	max-width: 800px;
+}

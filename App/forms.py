@@ -1,6 +1,6 @@
 import datetime
 from flask_wtf import Form, FlaskForm
-from wtforms import StringField, PasswordField, RadioField, SubmitField, DateField, FloatField, DecimalField
+from wtforms import StringField, PasswordField, RadioField, SubmitField, DateField, FloatField, DecimalField, IntegerField
 from wtforms.widgets import TextArea
 from wtforms import validators
 from wtforms.validators import DataRequired, Optional
@@ -97,3 +97,12 @@ class AddBillForm(FlaskForm):
 	INSURANCE			=DecimalField(label='INSURANCE' ,places=2, validators=[DataRequired()])
 	OTHER				=DecimalField(label='OTHER'     ,places=2, validators=[Optional()])
 	submitBtn = SubmitField(label='Submit')
+
+class AddSocietyForm(FlaskForm):
+	societyName = StringField (label='Society Name', validators=[DataRequired()])
+	region      = StringField (label='Address', widget=TextArea(), validators=[DataRequired(), validators.Length(min=5, max=127, message='Invalid Address Length')])
+	city        = StringField (label='City', validators=[DataRequired()])
+	state       = StringField (label='State', validators=[DataRequired()])
+	area        = IntegerField(label='Area of land', validators=[DataRequired()])
+	totalWings  = IntegerField(label='Total Wings in the Society', validators=[DataRequired()])
+	submitBtn   = SubmitField(label='Submit')
