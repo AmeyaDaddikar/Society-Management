@@ -1,0 +1,28 @@
+.title-text{
+	margin: auto;
+	margin-top: 10vh;
+	color: #3366cc;
+	font-size: 15vh;
+	text-shadow: #ebebe0 0px 0.1em;
+	text-align: center;
+}
+
+
+.title-sub-text {
+	font-size:5vh;
+	color: #66b3ff;
+	margin-top: 1em;
+	text-align: center;
+}
+
+.warning-text {
+	text-align: center;
+}
+
+.img-container {
+	margin-right: 5vw;
+}
+
+.img-container img {
+	max-width: 80vw;
+}

@@ -297,3 +297,15 @@ def uploadProfileImage():
 		flash('Invalid / Empty file uploaded. Try again')
 
 	return redirect(url_for('userProfile'))
+
+@app.route('/signup', methods=['GET', 'POST'])
+def signupPages():
+	#FIRST TIME OPENING PAGE
+	if request.method == 'GET':
+		session['pageCount'] = 1
+		return render_template('signup/societySetupPage.html')
+	# else:
+	# 	#WENT BACK TO PAGE 1
+	# 	if session['pageCount'] == 1:
+
+
