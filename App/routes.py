@@ -92,10 +92,12 @@ def adminPage():
 @admin_login_required
 def addNotice():
 	submittedNotice = AddNoticeForm(request.form)
-
 	if not submittedNotice.validate_on_submit():
 		for error in submittedNotice.errors.values():
 			flash(str(error[0]))
+	else:
+		notice_id = randint(1,9999)
+		addNoticeQuery = "INSERT INTO notices VALUES(%d,%d,'%s',%s','%s')" % (notice_id,session['societyId'],submittedNotice.header.data, submittedNotice.date.data, submittedNotice.body.data)
 	return redirect(url_for('adminPage'))
 
 @app.route('/addBill', methods=['POST'])
