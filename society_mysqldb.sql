@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 13, 2018 at 12:41 PM
+-- Generation Time: May 13, 2018 at 07:42 PM
 -- Server version: 10.1.30-MariaDB
 -- PHP Version: 7.2.2
 
@@ -42,10 +42,26 @@ CREATE TABLE `account` (
 --
 
 INSERT INTO `account` (`acc_name`, `flat_id`, `acc_pass`, `owner_name`, `pending_dues`, `profile_img`) VALUES
-('10110', 111, 'Hello', 'Vineet', '10500.00', ''),
-('10120', 112, '', 'Ameya', '12500.00', ''),
-('10210', 211, '', 'Aman', '15000.00', ''),
-('10220', 212, '', 'Yash', '20000.00', '');
+('CresTow31', 5, 'AccPass', 'A', '198.20', ''),
+('CresTow32', 10, 'AccPass', 'A', '990.15', ''),
+('CresTow33', 15, 'AccPass', 'A', '850.43', ''),
+('CresTow34', 20, 'AccPass', 'A', '661.53', ''),
+('CresTow41', 1, 'Pass', 'Nakula Dalavi', '0.00', ''),
+('CresTow42', 6, 'AccPass', 'A', '521.89', ''),
+('CresTow43', 11, 'AccPass', 'A', '551.49', ''),
+('CresTow44', 16, 'AccPass', 'A', '472.07', ''),
+('CresTow61', 4, 'AccPass', 'A', '878.41', ''),
+('CresTow62', 9, 'AccPass', 'A', '919.58', ''),
+('CresTow63', 14, 'AccPass', 'A', '374.03', ''),
+('CresTow64', 19, 'AccPass', 'A', '688.46', ''),
+('CresUC21', 2, 'AccPass', 'A', '817.15', ''),
+('CresUC22', 7, 'AccPass', 'A', '588.88', ''),
+('CresUC23', 12, 'AccPass', 'A', '616.93', ''),
+('CresUC24', 17, 'AccPass', 'A', '547.69', ''),
+('CresUC31', 3, 'AccPass', 'A', '713.66', ''),
+('CresUC32', 8, 'AccPass', 'A', '735.00', ''),
+('CresUC33', 13, 'AccPass', 'A', '409.18', ''),
+('CresUC34', 18, 'AccPass', 'A', '777.76', '');
 
 -- --------------------------------------------------------
 
@@ -65,7 +81,7 @@ CREATE TABLE `admin` (
 --
 
 INSERT INTO `admin` (`acc_name`, `resident_id`, `society_id`, `admin_pass`) VALUES
-('10010', 11, 1001, 'HelloAdmin');
+('CresAdmin1', 7, 1, 'AdminPass');
 
 -- --------------------------------------------------------
 
@@ -109,7 +125,6 @@ CREATE TABLE `basic_maintenance_bill` (
 CREATE TABLE `committee_member` (
   `resident_id` int(11) NOT NULL,
   `wing_id` int(11) NOT NULL,
-  `flat_no` int(11) NOT NULL,
   `post` varchar(31) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -117,8 +132,10 @@ CREATE TABLE `committee_member` (
 -- Dumping data for table `committee_member`
 --
 
-INSERT INTO `committee_member` (`resident_id`, `wing_id`, `flat_no`, `post`) VALUES
-(11, 101, 111, 'Admin');
+INSERT INTO `committee_member` (`resident_id`, `wing_id`, `post`) VALUES
+(1, 1, 'Treasurer'),
+(6, 3, 'Chairman'),
+(7, 3, 'Admin');
 
 -- --------------------------------------------------------
 
@@ -153,10 +170,9 @@ CREATE TABLE `facility` (
 --
 
 INSERT INTO `facility` (`society_id`, `facility_name`, `price_per_hour`, `start_time`, `end_time`) VALUES
-(1001, 'Car Parking', '35.00', '09:00:00', '21:00:00'),
-(1001, 'Gym', '250.00', '08:00:00', '22:00:00'),
-(1001, 'Swimming Pool', '25.00', '07:30:00', '19:00:00'),
-(1001, 'Turf', '120.00', '10:00:00', '17:00:00');
+(1, 'Car parking', '25.00', '00:00:00', '00:00:00'),
+(1, 'Gym', '150.00', '05:00:00', '22:00:00'),
+(1, 'Swimming Pool', '50.00', '06:00:00', '19:00:00');
 
 -- --------------------------------------------------------
 
@@ -169,7 +185,7 @@ CREATE TABLE `flat` (
   `wing_id` int(11) NOT NULL,
   `flat_num` int(11) NOT NULL,
   `facing` varchar(31) NOT NULL,
-  `area` int(11) NOT NULL,
+  `area` decimal(6,2) NOT NULL,
   `BHK` decimal(2,1) NOT NULL,
   `floor_no` int(11) NOT NULL,
   `price` decimal(10,2) NOT NULL
@@ -180,24 +196,26 @@ CREATE TABLE `flat` (
 --
 
 INSERT INTO `flat` (`flat_id`, `wing_id`, `flat_num`, `facing`, `area`, `BHK`, `floor_no`, `price`) VALUES
-(111, 101, 1, 'Road', 10, '2.0', 1, '10000.00'),
-(112, 101, 2, 'Road', 10, '2.0', 1, '9200.00'),
-(113, 101, 3, 'Road', 8, '3.0', 2, '10500.00'),
-(114, 101, 4, 'Road', 8, '2.0', 2, '8700.00'),
-(115, 101, 5, 'Garden', 6, '3.0', 3, '13760.00'),
-(116, 101, 6, 'Garden', 4, '3.0', 3, '9600.00'),
-(117, 101, 7, 'Garden', 4, '2.0', 4, '11500.25'),
-(118, 101, 8, 'Garden', 6, '4.0', 4, '12000.00'),
-(211, 102, 1, 'Forest', 12, '3.0', 1, '10090.00'),
-(212, 102, 2, 'Road', 11, '3.5', 1, '10923.00'),
-(213, 102, 3, 'Forest', 8, '2.5', 2, '7094.00'),
-(214, 102, 4, 'Road', 9, '3.0', 2, '8044.00'),
-(215, 102, 5, 'Forest', 12, '4.0', 3, '12000.00'),
-(216, 102, 6, 'Road', 9, '2.0', 3, '9755.00'),
-(217, 102, 7, 'Forest', 3, '1.0', 4, '5322.00'),
-(218, 102, 8, 'Road', 10, '2.0', 4, '14000.00'),
-(219, 102, 9, 'Forest', 6, '3.0', 5, '12746.00'),
-(220, 102, 10, 'Road', 8, '2.0', 5, '13000.00');
+(1, 1, 1, 'Road', '122.63', '2.0', 1, '14901257.36'),
+(2, 2, 1, 'Garden', '183.08', '3.0', 1, '7264300.33'),
+(3, 3, 1, 'Road', '165.98', '3.0', 1, '14679345.69'),
+(4, 4, 1, 'Road', '128.28', '4.0', 1, '6898278.36'),
+(5, 5, 1, 'Garden', '171.15', '2.0', 1, '13927108.77'),
+(6, 1, 2, 'Garden', '164.51', '3.0', 1, '5994075.69'),
+(7, 2, 2, 'Road', '145.26', '2.0', 1, '5266672.67'),
+(8, 3, 2, 'Garden', '193.56', '2.0', 1, '14847875.91'),
+(9, 4, 2, 'Garden', '188.87', '3.0', 1, '6313682.72'),
+(10, 5, 2, 'Road', '197.78', '4.0', 1, '7061944.77'),
+(11, 1, 3, 'Road', '113.44', '3.0', 2, '14199216.33'),
+(12, 2, 3, 'Garden', '113.13', '2.0', 2, '10231816.58'),
+(13, 3, 3, 'Road', '153.73', '3.0', 2, '13852142.43'),
+(14, 4, 3, 'Road', '119.42', '2.0', 2, '13149057.86'),
+(15, 5, 3, 'Garden', '126.67', '3.0', 2, '6575387.59'),
+(16, 1, 4, 'Garden', '182.47', '2.0', 2, '5920659.02'),
+(17, 2, 4, 'Road', '164.05', '2.0', 2, '14690337.61'),
+(18, 3, 4, 'Garden', '174.44', '2.0', 2, '13791953.26'),
+(19, 4, 4, 'Garden', '161.26', '2.0', 2, '14819224.63'),
+(20, 5, 4, 'Road', '126.96', '2.0', 2, '11881943.88');
 
 -- --------------------------------------------------------
 
@@ -219,14 +237,7 @@ CREATE TABLE `issues` (
 --
 
 INSERT INTO `issues` (`issue_id`, `acc_name`, `issue_date`, `issue_desc`, `reported_by`, `related`) VALUES
-(1, '10110', '2018-04-12', 'Hello World Test! Until now, it refused to allow insertion of new issues', '', 'None'),
-(2, '10110', '2018-04-12', 'Hello', '', 'Stationary'),
-(3, '10110', '2018-04-12', 'Hello', '', 'Stationary'),
-(4, '10120', '2018-04-12', 'The logout did not work for the previous account', '', 'Stationary'),
-(5, '10120', '2018-04-12', 'Trying another logout', '', 'Stationary'),
-(6, '10120', '2018-04-12', 'Why couldn\'t this have worked earlier?', '', 'Stationary'),
-(7, '10110', '2018-05-12', 'Timepass Issue', '', 'Stationary'),
-(8, '10110', '2018-05-13', 'HI there', '', 'Gardening');
+(1, 'CresTow41', '2018-05-13', 'The pool had a strange smell', '', 'Pool Facilities');
 
 -- --------------------------------------------------------
 
@@ -270,13 +281,8 @@ CREATE TABLE `notices` (
 --
 
 INSERT INTO `notices` (`notice_id`, `society_id`, `notice_header`, `notice_date`, `notice_desc`) VALUES
-(1111, 1001, 'Hello User!', '2018-04-11', 'This notice is a welcome notice for users'),
-(1112, 1001, 'Water supply reduction for summer', '2018-04-08', 'Unfortunately, there have been a few water cuts over the years'),
-(1113, 1001, 'Hello World', '2018-03-01', 'A message from the computer itself'),
-(1114, 1001, 'A-I Test', '2018-01-02', 'This is a test for auto-increment'),
-(1115, 1001, 'Hi there', '2018-12-31', 'Hey there\r\n'),
-(1116, 1001, 'New notice by admin', '2018-12-31', 'werwerwe'),
-(1117, 1001, 'One more', '2018-12-31', 'Hi there again');
+(1, 1, 'Welcome notice', '2017-09-12', 'Welcome to all the new members! An orientation will be held in the society hall on 21/09/2017. At least one member of each flat is required to attend it, however, all are welcome.\r\n\r\nThe Secretary,\r\nCrescent Bay'),
+(2, 1, 'Proposal for Day Care Centre', '2017-11-08', 'There has been made a proposal, numbered PR-DCC-001, for a day care centre next to the society park. The proposal has been sent to the members by email. Please review it before the next vote.\r\n\r\nThe Secretary,\r\nCrescent Bay');
 
 -- --------------------------------------------------------
 
@@ -299,7 +305,7 @@ CREATE TABLE `resident` (
   `resident_id` int(11) NOT NULL,
   `flat_id` int(11) NOT NULL,
   `resident_name` varchar(127) NOT NULL,
-  `contact` int(11) NOT NULL
+  `contact` varchar(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -307,14 +313,16 @@ CREATE TABLE `resident` (
 --
 
 INSERT INTO `resident` (`resident_id`, `flat_id`, `resident_name`, `contact`) VALUES
-(11, 111, 'Vineet', 0),
-(12, 112, 'Ameya', 0),
-(13, 211, 'Aman', 0),
-(14, 212, 'Yash', 0),
-(15, 111, 'Rishabh', 0),
-(16, 211, 'Jainam', 0),
-(17, 111, 'A', 321),
-(18, 112, 'A', 1234);
+(1, 1, 'Nakula Dalavi ', '91'),
+(2, 3, 'Sooraj Satavelekar ', '91'),
+(3, 1, 'Nasatya Barvadekar ', '74'),
+(4, 2, 'Ishwar Randhawa ', '528'),
+(5, 2, 'Sayana Sinha ', '91'),
+(6, 3, 'Har Kanungo ', '91'),
+(7, 3, 'Sarasvati Ojha ', '68'),
+(8, 4, 'Jaya Roychaudhuri ', '60'),
+(9, 4, 'Madri Upandhye ', '601'),
+(10, 2, 'Sarama Divekar ', '91');
 
 -- --------------------------------------------------------
 
@@ -328,7 +336,7 @@ CREATE TABLE `society` (
   `region` varchar(127) NOT NULL,
   `city` varchar(127) NOT NULL,
   `state` varchar(127) NOT NULL,
-  `area` int(11) NOT NULL
+  `area` decimal(5,2) NOT NULL COMMENT 'in acres'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -336,7 +344,7 @@ CREATE TABLE `society` (
 --
 
 INSERT INTO `society` (`society_id`, `society_name`, `region`, `city`, `state`, `area`) VALUES
-(1001, 'VJTI Society', 'Matunga', 'Mumbai', 'Maharashtra', 10000);
+(1, 'Crescent Bay', 'Parel, South Mumbai', 'Mumbai', 'Maharashtra', '5.48');
 
 -- --------------------------------------------------------
 
@@ -349,7 +357,7 @@ CREATE TABLE `wing` (
   `society_id` int(11) NOT NULL,
   `wing_name` varchar(15) NOT NULL,
   `no_of_floors` int(11) NOT NULL,
-  `total_area` int(11) NOT NULL
+  `total_area` decimal(6,4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -357,8 +365,11 @@ CREATE TABLE `wing` (
 --
 
 INSERT INTO `wing` (`wing_id`, `society_id`, `wing_name`, `no_of_floors`, `total_area`) VALUES
-(101, 1001, 'Wing-A', 4, 100),
-(102, 1001, 'Wing-B', 5, 125);
+(1, 1, 'Tower 4', 45, '1.0467'),
+(2, 1, 'UC2', 53, '1.2340'),
+(3, 1, 'UC3', 37, '0.8900'),
+(4, 1, 'Tower 6', 21, '0.5410'),
+(5, 1, 'Tower 3', 59, '1.7300');
 
 -- --------------------------------------------------------
 
@@ -393,8 +404,7 @@ ALTER TABLE `account`
 -- Indexes for table `admin`
 --
 ALTER TABLE `admin`
-  ADD PRIMARY KEY (`resident_id`),
-  ADD KEY `society_admin` (`society_id`);
+  ADD PRIMARY KEY (`resident_id`);
 
 --
 -- Indexes for table `basic_maintenance_bill`
@@ -409,7 +419,7 @@ ALTER TABLE `basic_maintenance_bill`
 --
 ALTER TABLE `committee_member`
   ADD PRIMARY KEY (`resident_id`),
-  ADD KEY `wing_committee` (`wing_id`);
+  ADD KEY `wing_member` (`wing_id`);
 
 --
 -- Indexes for table `documents`
@@ -449,8 +459,8 @@ ALTER TABLE `notices`
 -- Indexes for table `notice_wing`
 --
 ALTER TABLE `notice_wing`
-  ADD KEY `wing_notice` (`notice_id`),
-  ADD KEY `wing_constraint` (`wing_id`);
+  ADD KEY `notice_constraint` (`notice_id`),
+  ADD KEY `wing_notice` (`wing_id`);
 
 --
 -- Indexes for table `resident`
@@ -493,19 +503,37 @@ ALTER TABLE `documents`
 -- AUTO_INCREMENT for table `flat`
 --
 ALTER TABLE `flat`
-  MODIFY `flat_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=221;
+  MODIFY `flat_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `issues`
 --
 ALTER TABLE `issues`
-  MODIFY `issue_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `issue_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `notices`
 --
 ALTER TABLE `notices`
-  MODIFY `notice_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1118;
+  MODIFY `notice_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `resident`
+--
+ALTER TABLE `resident`
+  MODIFY `resident_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT for table `society`
+--
+ALTER TABLE `society`
+  MODIFY `society_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `wing`
+--
+ALTER TABLE `wing`
+  MODIFY `wing_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- Constraints for dumped tables
@@ -518,13 +546,6 @@ ALTER TABLE `account`
   ADD CONSTRAINT `flat_acc` FOREIGN KEY (`flat_id`) REFERENCES `flat` (`flat_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `admin`
---
-ALTER TABLE `admin`
-  ADD CONSTRAINT `member_admin` FOREIGN KEY (`resident_id`) REFERENCES `committee_member` (`resident_id`),
-  ADD CONSTRAINT `society_admin` FOREIGN KEY (`society_id`) REFERENCES `society` (`society_id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
 -- Constraints for table `basic_maintenance_bill`
 --
 ALTER TABLE `basic_maintenance_bill`
@@ -535,7 +556,7 @@ ALTER TABLE `basic_maintenance_bill`
 --
 ALTER TABLE `committee_member`
   ADD CONSTRAINT `resident_member` FOREIGN KEY (`resident_id`) REFERENCES `resident` (`resident_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `wing_committee` FOREIGN KEY (`wing_id`) REFERENCES `wing` (`wing_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `wing_member` FOREIGN KEY (`wing_id`) REFERENCES `wing` (`wing_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `documents`
@@ -571,8 +592,8 @@ ALTER TABLE `notices`
 -- Constraints for table `notice_wing`
 --
 ALTER TABLE `notice_wing`
-  ADD CONSTRAINT `wing_constraint` FOREIGN KEY (`wing_id`) REFERENCES `wing` (`wing_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `wing_notice` FOREIGN KEY (`notice_id`) REFERENCES `notices` (`notice_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `notice_constraint` FOREIGN KEY (`notice_id`) REFERENCES `notices` (`notice_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `wing_notice` FOREIGN KEY (`wing_id`) REFERENCES `wing` (`wing_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `resident`
