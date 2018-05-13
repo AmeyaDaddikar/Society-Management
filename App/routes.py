@@ -294,7 +294,7 @@ def uploadProfileImage():
 @app.route('/signup', methods=['GET'])
 def signupPages():
 	#FIRST TIME OPENING PAGE
-	session['pageCount'] = 2
+	session['pageCount'] = 3
 	if 'pageCount' not in session or session['pageCount'] == 1:
 		session['pageCount'] = 1
 		societyForm = AddSocietyForm(request.form)
@@ -308,9 +308,9 @@ def signupPages():
 
 	elif session['pageCount'] == 3:
 		totalWings   = 5
-		flatsPerWing = 2
+		flatsPerWing = 3
 
-		wingFlats = WingFlats(wingId=wingId, wings=[{} for x in range(flatsPerWing)])
+		wingFlats = WingFlats(wingId=1, flats=[{'flatNum' : 0,'flatFacing': 'NULL','area':0,'BHK':1,'floorNum':0,'price':0} for x in range(flatsPerWing)])
 		return render_template('signup/flatSetupPage.html',wingFlats=wingFlats)
 
 

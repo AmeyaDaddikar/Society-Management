@@ -21,18 +21,23 @@
 	<div class="container" style="max-width: 700px;">
 		<form method="post" action="#addWings">
 			{{wingFlats.hidden_tag()}}
-			{% for wing in wingFlats.wings %}
+			{{ wingFlats.wingId }}
+			{% for flat in wingFlats.flats %}
 			<hr/>
-			<h1 class="formHeading">{{ wing.label }}</h1>
-			{{wing.hidden_tag()}}
-			{{ wing.wingName.label}}
-			{{ wing.wingName(class_="form-control") }}
-			{{ wing.totalFloors.label}}
-			{{ wing.totalFloors(class_="form-control") }}totalFlats
-			{{ wing.totalArea.label}}
-			{{ wing.totalArea(class_="form-control") }}
-			{{ wing.totalFlats.label}}
-			{{ wing.totalFlats(class_="form-control") }}
+			<h1 class="formHeading">{{ flat.label }}</h1>
+			{{ flat.hidden_tag() }}
+			{{ flat.flatNum.label }}
+			{{ flat.flatNum(class_="form-control") }}
+			{{ flat.flatFacing.label }}
+			{{ flat.flatFacing(class_="form-control") }}totalFlats
+			{{ flat.area.label }}
+			{{ flat.area(class_="form-control") }}
+			{{ flat.BHK.label }}
+			{{ flat.BHK(class_="form-control") }}
+			{{ flat.floorNum.label }}
+			{{ flat.floorNum(class_="form-control") }}
+			{{ flat.price.label }}
+			{{ flat.price(class_="form-control") }}
 			{% endfor %}
 			<br/>
 			<br/>
