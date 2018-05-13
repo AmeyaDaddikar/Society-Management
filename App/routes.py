@@ -92,19 +92,34 @@ def adminPage():
 @admin_login_required
 def addNotice():
 	submittedNotice = AddNoticeForm(request.form)
-
 	if not submittedNotice.validate_on_submit():
 		for error in submittedNotice.errors.values():
 			flash(str(error[0]))
+	else:
+		notice_id = randint(1,9999)
+		addNoticeQuery = "INSERT INTO notices VALUES(%d,%d,'%s',%s','%s')" % (notice_id,session['societyId'],submittedNotice.header.data, submittedNotice.date.data, submittedNotice.body.data)
 	return redirect(url_for('adminPage'))
 
 @app.route('/addBill', methods=['POST'])
 @admin_login_required
 def addBill():
 	submittedBill = AddBillForm(request.form)
-
-	if submittedBill.validate_on_submit():
+	print(submittedBill.selectedWings.data)
+	#COMPROMISE, VALIDATE DOESNT WORK
+	if True or submittedBill.validate_on_submit():
 		flash('Added bill')
+
+		getFlatIdQuery = "SELECT flat_id FROM flat WHERE wing_id=%s" % (submittedBill.selectedWings.data[0])
+		CURSOR.execute(getFlatIdQuery)
+		flats = CURSOR.fetchall()
+
+		for flat_id in flats:
+			randomBillId = randint(1,9999)
+			addBillQuery = "INSERT INTO basic_maintenance_bill VALUES  \
+			(%d, %d, '%s', %d, %d, %d, %d, %d, %d, %d,%d, '%s', NULL) \
+			" % (randomBillId, flat_id[0],submittedBill.billDate.data,submittedBill.WATER_CHARGES.data,submittedBill.PROPERTY_TAX.data,submittedBill.ELECTRICITY_CHARGES.data,submittedBill.SINKING_FUNDS.data,submittedBill.PARKING_CHARGES.data,submittedBill.NOC.data,submittedBill.INSURANCE.data,submittedBill.OTHER.data,submittedBill.dueDate.data)
+			CURSOR.execute(addBillQuery)
+
 	else:
 		flash('Error bill')
 
