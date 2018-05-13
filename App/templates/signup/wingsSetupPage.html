@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block headIncludes %}
+	<link rel="stylesheet" href="static/css/wing_setup_layout.css">
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+	<div class="container">
+		<h1 class="title-text">
+			Society Wings
+		</h1>
+		<br/>
+		<br/>
+		<h3 class="alert-warning" style="text-align: center;">
+			The changes made during these pages will be deemed as final.
+			<br/>Please enter the following forms carefully.
+		</h3>
+	</div>
+	<div class="container" style="max-width: 700px;">
+		<form method="post" action="#addWings">
+			{{wingForms.hidden_tag()}}
+			{% for wing in wingForms.wings %}
+			<hr/>
+			<h1 class="formHeading">{{ wing.label }}</h1>
+			{{wing.hidden_tag()}}
+			{{ wing.wingName.label}}
+			{{ wing.wingName(class_="form-control") }}
+			{{ wing.totalFloors.label}}
+			{{ wing.totalFloors(class_="form-control") }}totalFlats
+			{{ wing.totalArea.label}}
+			{{ wing.totalArea(class_="form-control") }}
+			{{ wing.totalFlats.label}}
+			{{ wing.totalFlats(class_="form-control") }}
+			{% endfor %}
+			<br/>
+			<br/>
+			<center>
+				{{ wingForms.submitBtn(class_="btn btn-primary btn-block btn-lg") }}
+			</center>
+	</div>
+	<br/>
+	<br/>
+</div>
+
+{% endblock %}

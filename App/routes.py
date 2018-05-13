@@ -79,6 +79,7 @@ def adminPage():
 	
 	newNoticeForm = AddNoticeForm (request.form)
 	newBillForm   = AddBillForm   (request.form)
+	newBillForm.selectedWings.choices = []	# Add choices list here Rao
 
 	return render_template('admin/adminpage.html', address=address, counter=statsCounter, noticeForm=newNoticeForm, billForm=newBillForm)
 
@@ -229,7 +230,7 @@ def updateUserDetails():
 @app.route('/issues', methods=['GET', 'POST'])
 @user_login_required
 def getComplaints():
-	#get the POST DATA from forms if submitted
+		#get the POST DATA from forms if submitted
 	if(request.method == 'POST'):
 		related = request.form.get("relatedTo", None)
 		if(related == None):
@@ -248,19 +249,11 @@ def getComplaints():
 			curr_day = '0' + str(now.day)
 		else:
 			curr_day = str(now.day)
-		curr_date = curr_year + curr_month + curr_day
+		curr_date = curr_year + '-' + curr_month + '-' + curr_day
 		print(accId)
 		print(curr_date)
-		check_max_query = "SELECT MAX(issue_id) FROM issues"
-		CURSOR.execute(check_max_query)
-		curr_max = CURSOR.fetchone()
-		print(curr_max)
-		if curr_max[0] is not None:
-			# print(new_max)
-            #new_issue_query = "INSERT INTO issues VALUES(%d, %d, '%s', '%s', '', '%s')" % (new_max, accId, curr_date, complaint, related)
-            #CURSOR.execute(new_issue_query)
-			CURSOR.execute("INSERT INTO issues(acc_name, issue_date, issue_desc, reported_by, related) VALUES(%s, %s, %s, '', %s)", [int(accId), curr_date, complaint, related])
-			CONN.commit()
+		CURSOR.execute("INSERT INTO issues(acc_name, issue_date, issue_desc, reported_by, related) VALUES(%s, %s, %s, '', %s)", [accId, curr_date, complaint, related])
+		CONN.commit()
 		return redirect(url_for('getComplaints'))
 
 	elif(request.method == 'GET'):
@@ -298,15 +291,26 @@ def uploadProfileImage():
 
 	return redirect(url_for('userProfile'))
 
-@app.route('/signup', methods=['GET', 'POST'])
+@app.route('/signup', methods=['GET'])
 def signupPages():
 	#FIRST TIME OPENING PAGE
-	if request.method == 'GET':
-		societyForm = AddSocietyForm(request.form)
+	session['pageCount'] = 2
+	if 'pageCount' not in session or session['pageCount'] == 1:
 		session['pageCount'] = 1
+		societyForm = AddSocietyForm(request.form)
 		return render_template('signup/societySetupPage.html', societyForm=societyForm)
-	# else:
-	# 	#WENT BACK TO PAGE 1
-	# 	if session['pageCount'] == 1:
+	elif session['pageCount'] == 2:
+
+		#totalWings = session['totalWings']
+		totalWings  = 5
+		wingForms  = WingForms(wings = [{'wingName':'', 'totalFloors': 0, 'totalArea': 0, 'num' : x} for x in range(totalWings)])
+		return render_template('signup/wingsSetupPage.html',wingForms=wingForms)
+
+	elif session['pageCount'] == 3:
+		totalWings   = 5
+		flatsPerWing = 2
+
+		wingFlats = WingFlats(wingId=wingId, wings=[{} for x in range(flatsPerWing)])
+		return render_template('signup/flatSetupPage.html',wingFlats=wingFlats)
 
 

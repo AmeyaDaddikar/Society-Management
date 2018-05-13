@@ -1,6 +1,6 @@
 import datetime
 from flask_wtf import Form, FlaskForm
-from wtforms import StringField, PasswordField, RadioField, SubmitField, DateField, FloatField, DecimalField, IntegerField
+from wtforms import StringField, PasswordField, RadioField, SubmitField, DateField, FloatField, DecimalField, IntegerField, FieldList, FormField, HiddenField, SelectMultipleField
 from wtforms.widgets import TextArea
 from wtforms import validators
 from wtforms.validators import DataRequired, Optional
@@ -85,9 +85,9 @@ class AddNoticeForm(FlaskForm):
 #categories = {'WATER CHARGES':3, 'PROPERTY TAX':4, 'ELECTRICITY CHARGES':5, 'SINKING FUNDS':6, 'PARKING CHARGES':7, 'NOC':8, 'INSURANCE':9, 'OTHER':10}
 
 class AddBillForm(FlaskForm):
-	billDate    = DateField('Bill Date', format='%Y-%m-%d', validators=[DataRequired()])
-	dueDate     = DateField('Due Date',  format='%Y-%m-%d', validators=[DataRequired()])
-
+	billDate      = DateField('Bill Date', format='%Y-%m-%d', validators=[DataRequired()])
+	dueDate       = DateField('Due Date',  format='%Y-%m-%d', validators=[DataRequired()])
+	selectedWings = SelectMultipleField('Wings', validators=[DataRequired()])
 	WATER_CHARGES		=DecimalField(label='WATER CHARGES'       ,places=2, validators=[DataRequired()])
 	PROPERTY_TAX		=DecimalField(label='PROPERTY TAX'        ,places=2, validators=[DataRequired()])
 	ELECTRICITY_CHARGES=DecimalField(label='ELECTRICITY CHARGES',places=2, validators=[DataRequired()])
@@ -106,3 +106,26 @@ class AddSocietyForm(FlaskForm):
 	area        = IntegerField(label='Area of land', validators=[DataRequired()])
 	totalWings  = IntegerField(label='Total Wings in the Society', validators=[DataRequired()])
 	submitBtn   = SubmitField(label='Submit')
+
+class AddWingForm(FlaskForm):
+	wingName    = StringField (label='Wing Name', validators=[DataRequired()])
+	totalFloors = IntegerField(label='Total Floors', validators=[DataRequired()])
+	totalArea   = IntegerField(label='Total Area', validators=[DataRequired()])
+	totalFlats  = IntegerField(label='Flats', validators=[DataRequired()])
+
+class WingForms(FlaskForm):
+	wings     = FieldList(FormField(AddWingForm, 'Wing'), min_entries=1)
+	submitBtn = SubmitField(label='Submit')
+
+class AddFlatForm(FlaskForm):
+	flatNum    = IntegerField(label='Flat Number', validators=[DataRequired()])
+	flatFacing = StringField (label='Flat Facing', validators=[DataRequired()])
+	area       = IntegerField(label='Area', validators=[DataRequired()])
+	BHK        = DecimalField(label='Total BHK' ,places=1, validators=[DataRequired()])
+	floorNum   = IntegerField(label='Area', validators=[DataRequired()])
+	price      = DecimalField(label='OTHER' ,places=2, validators=[DataRequired()])
+
+class WingFlats(FlaskForm):
+	wingId    = HiddenField("wingId")
+	flats     = FieldList(FormField(AddFlatForm, 'flat'), min_entries=1)
+	submitBtn = SubmitField(label='Submit')

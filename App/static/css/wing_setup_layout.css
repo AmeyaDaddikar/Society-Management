@@ -1,0 +1,17 @@
+.title-text{
+	margin: auto;
+	margin-top: 10vh;
+	color: #3366cc;
+	font-size: 12vh;
+	text-shadow: #ebebe0 0px 0.1em;
+	text-align: center;
+}
+
+.formHeading {
+	color:#cc66ff;
+	font-family:inherit;
+	text-shadow: 2px 2px #6946d2;
+	font-size: 350%;
+	text-align:center;
+}
+
