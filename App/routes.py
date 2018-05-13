@@ -119,6 +119,8 @@ def addBill():
 			(%d, %d, '%s', %d, %d, %d, %d, %d, %d, %d,%d, '%s', NULL) \
 			" % (randomBillId, flat_id[0],submittedBill.billDate.data,submittedBill.WATER_CHARGES.data,submittedBill.PROPERTY_TAX.data,submittedBill.ELECTRICITY_CHARGES.data,submittedBill.SINKING_FUNDS.data,submittedBill.PARKING_CHARGES.data,submittedBill.NOC.data,submittedBill.INSURANCE.data,submittedBill.OTHER.data,submittedBill.dueDate.data)
 			CURSOR.execute(addBillQuery)
+			CURSOR.fetchall()
+			print('ADDED BILL')
 
 	else:
 		flash('Error bill')
