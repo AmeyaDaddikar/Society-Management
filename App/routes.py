@@ -212,6 +212,7 @@ def userProfile():
 			imageUrl = '#none'
 		else:
 			imageUrl = '/documents/' + imageUrl
+			print(imageUrl)
 
 		residentQuery = "SELECT resident_name, resident_id FROM resident WHERE flat_id=%d" % (session['flatId'])
 		CURSOR.execute(residentQuery)
@@ -279,6 +280,7 @@ def uploadProfileImage():
 			profImage.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
 			imagePathQuery = "UPDATE account SET profile_img='%s' WHERE acc_name='%s'" % (filename, session['accName'])
+			CURSOR.execute(imagePathQuery)
 		else:
 			flash('Invalid file format.')
 
