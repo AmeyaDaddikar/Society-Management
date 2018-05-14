@@ -14,7 +14,7 @@
 	<div class="container-fluid row" style="margin: auto;">
 		<div class="col-md-4 align-content-center">
 			<div class="imageContainer"  data-toggle="modal" data-target="#changeProfile">
-				<img src="#" id="profileImg" alt=""/>
+				<img src="{{ url_for('static', filename=imageUrl) }}" id="profileImg" alt=""/>
 				<div><center><h4>Change</h4></center></div>
 			</div>
 		</div>
@@ -84,7 +84,7 @@
 				<div class="modal-body">
 					<div class="form-group">
 						<label for="profImage">Upload Photo</label><br/>
-						<input type="file" name="profImage" id="profImage"/>
+						<input type="file" name="file" id="profImage"/>
 					</div>
 				</div>
 				<div class="modal-footer">

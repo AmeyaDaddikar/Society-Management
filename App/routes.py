@@ -109,24 +109,24 @@ def addBill():
 	if True or submittedBill.validate_on_submit():
 		flash('Added bill')
 
-		getFlatIdQuery = "SELECT flat_id FROM flat WHERE wing_id=%s" % (submittedBill.selectedWings.data[0])
-		CURSOR.execute(getFlatIdQuery)
-		flats = CURSOR.fetchall()
+		for selWing in submittedBill.selectedWings.data:
+			getFlatIdQuery = "SELECT flat_id FROM flat WHERE wing_id=%s" % (selWing)
+			CURSOR.execute(getFlatIdQuery)
+			flats = CURSOR.fetchall()
 
-		for flat_id in flats:
-			randomBillId = randint(1,9999)
-			addBillQuery = "INSERT INTO basic_maintenance_bill VALUES  \
-			(%d, %d, '%s', %d, %d, %d, %d, %d, %d, %d,%d, '%s', NULL) \
-			" % (randomBillId, flat_id[0],submittedBill.billDate.data,submittedBill.WATER_CHARGES.data,submittedBill.PROPERTY_TAX.data,submittedBill.ELECTRICITY_CHARGES.data,submittedBill.SINKING_FUNDS.data,submittedBill.PARKING_CHARGES.data,submittedBill.NOC.data,submittedBill.INSURANCE.data,submittedBill.OTHER.data,submittedBill.dueDate.data)
-			CURSOR.execute(addBillQuery)
-			CURSOR.fetchall()
+			for flat_id in flats:
+				randomBillId = randint(1,9999)
+				addBillQuery = "INSERT INTO basic_maintenance_bill VALUES  \
+				(%d, %d, '%s', %d, %d, %d, %d, %d, %d, %d,%d, '%s', NULL) \
+				" % (randomBillId, flat_id[0],submittedBill.billDate.data,submittedBill.WATER_CHARGES.data,submittedBill.PROPERTY_TAX.data,submittedBill.ELECTRICITY_CHARGES.data,submittedBill.SINKING_FUNDS.data,submittedBill.PARKING_CHARGES.data,submittedBill.NOC.data,submittedBill.INSURANCE.data,submittedBill.OTHER.data,submittedBill.dueDate.data)
+				CURSOR.execute(addBillQuery)
+				CURSOR.fetchall()
+				CONN.commit()
 			print('ADDED BILL')
-
 	else:
 		flash('Error bill')
 
 	return redirect(url_for('adminPage'))
-
 
 @app.route('/logout', methods=['GET'])
 def logout():
@@ -206,16 +206,19 @@ def userProfile():
 		ownerRes    = CURSOR.fetchone()
 		ownerName   = ownerRes[0]
 		pendingDues = ownerRes[1]
-		profImage   = ownerRes[2]
+		imageUrl    = ownerRes[2]
 
-		print(profImage)
+		if imageUrl is None:
+			imageUrl = '#none'
+		else:
+			imageUrl = '/documents/' + imageUrl
 
 		residentQuery = "SELECT resident_name, resident_id FROM resident WHERE flat_id=%d" % (session['flatId'])
 		CURSOR.execute(residentQuery)
 
 		resList = [{'name' :row[0], 'phone': str(1234), 'id': str(row[1])} for row in CURSOR.fetchall()]
 		residentForm = AddResident(request.form)
-		return render_template('user/userprofile.html', ownerName = ownerName, resList = resList, pendingDues = pendingDues, residentForm=residentForm)
+		return render_template('user/userprofile.html', imageUrl=imageUrl, ownerName = ownerName, resList = resList, pendingDues = pendingDues, residentForm=residentForm)
 
 @app.route('/editDetails', methods=['POST'])
 @user_login_required
@@ -268,22 +271,16 @@ def getComplaints():
 @app.route('/editProfileImage', methods=['POST'])
 @user_login_required
 def uploadProfileImage():
-	if 'profImage' in request.files:
-		profImage = request.files['profImage']
+	if 'file' in request.files:
+		profImage = request.files['file']
 
 		if profImage and allowed_file(profImage.filename):
-			profImage = profImage.read()
+			filename = secure_filename(profImage.filename)
+			profImage.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
-			removeOldProfFileQuery = 'UPDATE account SET profile_img=NULL WHERE acc_name="%s"' % (session['accName'])
-			CURSOR.execute(removeOldProfFileQuery)
-
-			uploadProfFileQuery = "UPDATE account SET profile_img=%s WHERE acc_name=%s"
-			args = (profImage, session['accName'])
-			CURSOR.execute(uploadProfFileQuery, args)
+			imagePathQuery = "UPDATE account SET profile_img='%s' WHERE acc_name='%s'" % (filename, session['accName'])
 		else:
 			flash('Invalid file format.')
-			#image = read_file(profImage)
-			#print(os.path.join(app.config['UPLOAD_FOLDER'], session['societyName'], 'images', profFileName))
 
 
 	else:
@@ -293,22 +290,5 @@ def uploadProfileImage():
 
 @app.route('/signup', methods=['GET'])
 def signupPages():
-	#FIRST TIME OPENING PAGE
-	session['pageCount'] = 3
-	if 'pageCount' not in session or session['pageCount'] == 1:
-		session['pageCount'] = 1
-		societyForm = AddSocietyForm(request.form)
-		return render_template('signup/societySetupPage.html', societyForm=societyForm)
-	elif session['pageCount'] == 2:
-
-		#totalWings = session['totalWings']
-		totalWings  = 5
-		wingForms  = WingForms(wings = [{'wingName':'', 'totalFloors': 0, 'totalArea': 0, 'num' : x} for x in range(totalWings)])
-		return render_template('signup/wingsSetupPage.html',wingForms=wingForms)
-
-	elif session['pageCount'] == 3:
-		totalWings   = 5
-		flatsPerWing = 3
-
-		wingFlats = WingFlats(wingId=1, flats=[{'flatNum' : 0,'flatFacing': 'NULL','area':0,'BHK':1,'floorNum':0,'price':0} for x in range(flatsPerWing)])
-		return render_template('signup/flatSetupPage.html',wingFlats=wingFlats)
+	societyForm = AddSocietyForm(request.form)
+	return render_template('signup/societySetupPage.html', societyForm=societyForm)
