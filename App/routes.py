@@ -211,7 +211,7 @@ def userProfile():
 		if imageUrl is None:
 			imageUrl = '#none'
 		else:
-			imageUrl = '/documents/' + imageUrl
+			imageUrl = 'documents/' + imageUrl
 			print(imageUrl)
 
 		residentQuery = "SELECT resident_name, resident_id FROM resident WHERE flat_id=%d" % (session['flatId'])
