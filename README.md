@@ -1,11 +1,16 @@
 # Society Management
 #### A simple web-application in flask for society-management and accounting system.
 
+Login Page
 ![Login Page](screenshot_pc_1.png)
 
+Notice Board
 ![Noticeboard](screenshot_pc_2.png)
 
+Bill Page {mobile view}
 ![Bill page (mobile view)](screenshot_mobile_1.png)
+
+## Configurations:
 
 1. Activate the virtual environment
 ```
