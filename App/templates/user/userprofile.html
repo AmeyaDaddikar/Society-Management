@@ -13,8 +13,8 @@
 <div class="col-md-10">
 	<div class="container-fluid row" style="margin: auto;">
 		<div class="col-md-4 align-content-center">
-			<div class="imageContainer"  data-toggle="modal" data-target="#changeProfile">
-				<img src="{{ url_for('static', filename=imageUrl) }}" id="profileImg" alt=""/>
+			<div class="imageContainer"  data-toggle="modal" data-target="#changeProfile" style="background: url({{ url_for('static', filename=imageUrl) }}) no-repeat center;">
+				<!-- <img src="{{ url_for('static', filename=imageUrl) }}" width="150" id="profileImg" alt=""/> -->
 				<div><center><h4>Change</h4></center></div>
 			</div>
 		</div>

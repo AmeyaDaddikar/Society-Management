@@ -2,7 +2,7 @@ from flask import Flask
 import os
 STATIC_FOLDER = os.getcwd()   + '/App/static'
 UPLOAD_FOLDER = STATIC_FOLDER + '/documents'
-ALLOWED_EXTENSIONS = set(['pdf', 'png', 'jpg', 'jpeg'])
+ALLOWED_EXTENSIONS = set(['pdf', 'png', 'jpg', 'jpeg', 'csv'])
 
 def allowed_file(filename):
 	return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS

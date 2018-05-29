@@ -19,6 +19,7 @@
 
 #profileImg {
 	z-index: 1;
+	width: 5vw;
 	overflow: hidden;
 }
 

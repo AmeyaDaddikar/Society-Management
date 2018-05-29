@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 14, 2018 at 02:10 AM
+-- Generation Time: May 13, 2018 at 07:42 PM
 -- Server version: 10.1.30-MariaDB
 -- PHP Version: 7.2.2
 
@@ -305,7 +305,7 @@ CREATE TABLE `resident` (
   `resident_id` int(11) NOT NULL,
   `flat_id` int(11) NOT NULL,
   `resident_name` varchar(127) NOT NULL,
-  `contact` varchar(11) NOT NULL DEFAULT ''
+  `contact` varchar(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -411,6 +411,7 @@ ALTER TABLE `admin`
 --
 ALTER TABLE `basic_maintenance_bill`
   ADD PRIMARY KEY (`bill_num`),
+  ADD UNIQUE KEY `bill_date` (`bill_date`),
   ADD KEY `flat_bill` (`flat_id`);
 
 --

@@ -32,7 +32,13 @@ def admin_login_required(f):
 	return decorated_function
 
 @app.route('/', methods=['GET', 'POST'])
+@app.route('/index', methods=['GET', 'POST'])
 def index():
+	if('mainPage' in session):
+		if(session['mainPage']=='/dashboard'):
+			return redirect(url_for('userDashboard'))
+		else:
+			return redirect(url_for('adminPage'))
 	loginForm = LoginForm(request.form)
 	if request.method == 'POST':
 		if loginForm.validate_on_submit():
@@ -212,12 +218,11 @@ def userProfile():
 			imageUrl = '#none'
 		else:
 			imageUrl = 'documents/' + imageUrl
-			print(imageUrl)
 
-		residentQuery = "SELECT resident_name, resident_id FROM resident WHERE flat_id=%d" % (session['flatId'])
+		residentQuery = "SELECT resident_name, contact, resident_id FROM resident WHERE flat_id=%d" % (session['flatId'])
 		CURSOR.execute(residentQuery)
 
-		resList = [{'name' :row[0], 'phone': str(1234), 'id': str(row[1])} for row in CURSOR.fetchall()]
+		resList = [{'name' :row[0], 'phone': str(row[1]), 'id': str(row[2])} for row in CURSOR.fetchall()]
 		residentForm = AddResident(request.form)
 		return render_template('user/userprofile.html', imageUrl=imageUrl, ownerName = ownerName, resList = resList, pendingDues = pendingDues, residentForm=residentForm)
 
@@ -225,10 +230,10 @@ def userProfile():
 @user_login_required
 def updateUserDetails():
 	residentForm  = AddResident(request.form)
-	newResidentId = randint(1, 999999)
 
-	addResQuery = "INSERT INTO resident VALUES ( %d, %d, '%s', %d)" % (newResidentId, session['flatId'], residentForm.name.data, residentForm.contact.data)
+	addResQuery = "INSERT INTO resident(flat_id, resident_name, contact) VALUES (%d, '%s', %d)" % (session['flatId'], residentForm.name.data, residentForm.contact.data)
 	CURSOR.execute(addResQuery)
+	CONN.commit()
 	return redirect(url_for('userProfile'))
 
 @app.route('/issues', methods=['GET', 'POST'])
@@ -281,6 +286,7 @@ def uploadProfileImage():
 
 			imagePathQuery = "UPDATE account SET profile_img='%s' WHERE acc_name='%s'" % (filename, session['accName'])
 			CURSOR.execute(imagePathQuery)
+			CONN.commit()
 		else:
 			flash('Invalid file format.')
 
@@ -290,7 +296,23 @@ def uploadProfileImage():
 
 	return redirect(url_for('userProfile'))
 
-@app.route('/signup', methods=['GET'])
+@app.route('/signup', methods=['GET','POST'])
 def signupPages():
 	societyForm = AddSocietyForm(request.form)
+	if 'file' in request.files:
+		infoCSV = request.files['file']
+		
+		if infoCSV and allowed_file(infoCSV.filename):
+			filename = secure_filename(infoCSV.filename)
+			infoCSV.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+		else:
+			flash('Invalid file format.')
+			return render_template('signup/societySetupPage.html', societyForm=societyForm)
+	if societyForm.validate_on_submit():
+		return render_template('signup/societySetupPage.html', societyForm=societyForm)
+	for fields,errors in societyForm.errors.items():
+		for error in errors:
+			flash(getattr(societyForm, fields).label.text + " " + error)
 	return render_template('signup/societySetupPage.html', societyForm=societyForm)
+	
+

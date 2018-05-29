@@ -102,12 +102,26 @@ class AddBillForm(FlaskForm):
 
 class AddSocietyForm(FlaskForm):
 	societyName = StringField (label='Society Name', validators=[DataRequired()])
+	adminName   = StringField (label='Admin Account Name', validators=[DataRequired()])
+	adminPass   = PasswordField (label='Admin Password', validators=[DataRequired()])
 	region      = StringField (label='Address', widget=TextArea(), validators=[DataRequired(), validators.Length(min=5, max=127, message='Invalid Address Length')])
 	city        = StringField (label='City', validators=[DataRequired()])
 	state       = StringField (label='State', validators=[DataRequired()])
 	area        = IntegerField(label='Area of land', validators=[DataRequired()])
 	totalWings  = IntegerField(label='Total Wings in the Society', validators=[DataRequired()])
 	submitBtn   = SubmitField(label='Submit')
+	
+	def validate(self):
+		validInput=FlaskForm.validate(self)
+		if not validInput:
+			return False
+		CURSOR.execute("INSERT INTO society(society_name, region, city, state, area) VALUES (%s, %s, %s, %s, %s)", [self.societyName.data, self.region.data, self.city.data, self.state.data, int(self.area.data)])
+		CURSOR.execute("SELECT society_id FROM society WHERE society_name=%s", [self.societyName.data])
+		socRes=CURSOR.fetchone()
+		socId=socRes[0]
+		CURSOR.execute("INSERT INTO admin(acc_name, society_id, admin_pass) VALUES(%s, %s, %s)", [self.adminName.data, int(socId), self.adminPass.data])
+		CONN.commit()
+		return True
 
 class AddWingForm(FlaskForm):
 	wingName    = StringField (label='Wing Name', validators=[DataRequired()])
